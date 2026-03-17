@@ -1,54 +1,72 @@
-import { Check } from "lucide-react";
+import { Check, Minus } from "lucide-react";
 
-const plans = [
+interface Feature {
+  label: string;
+  included: boolean;
+}
+
+interface Plan {
+  name: string;
+  price: string;
+  priceSuffix: string;
+  subtext?: string;
+  features: Feature[];
+  popular: boolean;
+  cta: string;
+}
+
+const plans: Plan[] = [
   {
-    name: "Starter",
-    price: "₹30,000",
-    priceSuffix: "– ₹35,000",
-    description: "Perfect for small businesses and solo entrepreneurs.",
+    name: "Starter Website",
+    price: "₹4,000",
+    priceSuffix: "– ₹5,000",
     features: [
-      "Custom UI Layout",
-      "Responsive Design",
-      "Basic Animations",
-      "SEO Setup",
-      "Deployment",
+      { label: "Custom UI Layout", included: true },
+      { label: "Responsive Design", included: true },
+      { label: "Basic Animations", included: true },
+      { label: "SEO Setup", included: true },
+      { label: "Deployment", included: true },
+      { label: "Backend Integration", included: false },
+      { label: "Database Setup", included: false },
+      { label: "Advanced Animations", included: false },
     ],
     popular: false,
-    cta: "Get Started",
+    cta: "START PROJECT",
   },
   {
-    name: "Professional",
-    price: "₹55,000",
-    priceSuffix: "– ₹60,000",
-    description: "The complete package for growing brands.",
+    name: "Professional Website",
+    price: "₹6,000",
+    priceSuffix: "– ₹12,000",
     features: [
-      "Premium UI/UX Design",
-      "Advanced Animations",
-      "Frontend Development",
-      "Backend Integration",
-      "Database Setup",
-      "Mobile Optimization",
-      "Deployment",
+      { label: "Premium UI/UX Design", included: true },
+      { label: "Advanced Animations", included: true },
+      { label: "Frontend Development", included: true },
+      { label: "Backend Integration", included: true },
+      { label: "Database Setup", included: true },
+      { label: "Mobile Optimization", included: true },
+      { label: "Deployment", included: true },
+      { label: "Cinematic Animations", included: false },
+      { label: "Interactive Scroll Effects", included: false },
     ],
     popular: true,
-    cta: "Most Popular",
+    cta: "START PROJECT",
   },
   {
-    name: "Premium",
-    price: "₹70,000",
+    name: "Premium Experience",
+    price: "₹15,000",
     priceSuffix: "+",
-    description: "Cinematic, world-class digital experiences.",
+    subtext: "Based on requirements",
     features: [
-      "Fully Custom Design System",
-      "Cinematic Animations",
-      "Interactive Scroll Effects",
-      "Performance Optimization",
-      "Backend + Database Architecture",
-      "SEO Optimization",
-      "Priority Support",
+      { label: "Fully Custom Design System", included: true },
+      { label: "Cinematic Animations", included: true },
+      { label: "Interactive Scroll Effects", included: true },
+      { label: "Advanced Performance Optimization", included: true },
+      { label: "Backend + Database Architecture", included: true },
+      { label: "SEO Optimization", included: true },
+      { label: "Priority Support", included: true },
     ],
     popular: false,
-    cta: "Let's Talk",
+    cta: "START PROJECT",
   },
 ];
 
@@ -65,58 +83,107 @@ export default function PricingSection() {
           <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
             Pricing
           </h2>
-          <p className="text-white/40 mt-4 text-lg max-w-lg">
-            Transparent pricing for every stage of growth. Click any plan to start a conversation.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 items-start">
+        {/* Cards: popular card sits higher / is taller */}
+        <div className="flex flex-col md:flex-row gap-4 md:gap-5 items-start justify-center">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              onClick={scrollToContact}
-              className={`glass-card rounded-2xl p-8 cursor-none transition-all duration-300 group ${
-                plan.popular ? "pricing-popular relative" : ""
-              }`}
+              className={`relative flex flex-col w-full md:w-[340px] rounded-2xl border transition-all duration-300
+                ${plan.popular
+                  ? "bg-[#111] border-white/20 md:-mt-6 md:mb-0 shadow-[0_0_60px_rgba(255,255,255,0.04)] z-10"
+                  : "bg-[#0d0d0d] border-white/08"
+                }`}
+              style={{
+                borderColor: plan.popular ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.07)",
+              }}
             >
+              {/* Most popular badge */}
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-bold px-4 py-1 rounded-full">
-                  MOST POPULAR
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <div className="bg-[#111] border border-white/20 rounded-full px-5 py-1.5 text-white text-xs font-bold tracking-widest whitespace-nowrap">
+                    MOST POPULAR
+                  </div>
                 </div>
               )}
 
-              <div className="mb-6">
-                <div className="text-white/40 text-sm mb-2">{plan.name}</div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-white text-4xl font-black">{plan.price}</span>
-                  <span className="text-white/40 text-lg">{plan.priceSuffix}</span>
+              <div className="p-7 flex flex-col flex-1">
+                {/* Plan name + dot for popular */}
+                <div className="flex items-center gap-2 mb-3">
+                  <span
+                    className={`text-base font-bold ${plan.popular ? "text-white" : "text-white/80"}`}
+                  >
+                    {plan.name}
+                  </span>
+                  {plan.popular && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-white inline-block" />
+                  )}
                 </div>
-                <p className="text-white/40 text-sm mt-3 leading-relaxed">
-                  {plan.description}
-                </p>
+
+                {/* Price */}
+                <div className="mb-1">
+                  <div className="flex items-baseline gap-1 flex-wrap">
+                    <span className={`font-black tracking-tight leading-none ${plan.popular ? "text-4xl text-white" : "text-3xl text-white"}`}>
+                      {plan.price}
+                    </span>
+                    <span className={`font-black tracking-tight leading-none ${plan.popular ? "text-4xl text-white" : "text-3xl text-white"}`}>
+                      {plan.priceSuffix}
+                    </span>
+                  </div>
+                  {plan.subtext && (
+                    <p className="text-white/35 text-xs mt-1.5">{plan.subtext}</p>
+                  )}
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-white/10 my-6" />
+
+                {/* Features */}
+                <ul className="space-y-3 flex-1">
+                  {plan.features.map((f) => (
+                    <li key={f.label} className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        {f.included ? (
+                          <Check
+                            size={13}
+                            strokeWidth={2.5}
+                            className="text-white flex-shrink-0"
+                          />
+                        ) : (
+                          <Minus
+                            size={13}
+                            strokeWidth={2}
+                            className="text-white/20 flex-shrink-0"
+                          />
+                        )}
+                        <span
+                          className={`text-sm ${f.included ? "text-white/80" : "text-white/25"}`}
+                        >
+                          {f.label}
+                        </span>
+                      </div>
+                      {!f.included && (
+                        <span className="text-[10px] font-semibold tracking-wider text-white/25 uppercase flex-shrink-0">
+                          Next Tier
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA button */}
+                <button
+                  onClick={scrollToContact}
+                  className={`mt-8 w-full py-3.5 rounded-xl text-sm font-bold tracking-widest transition-all duration-200 hover:scale-[1.02]
+                    ${plan.popular
+                      ? "bg-white text-black hover:bg-white/90"
+                      : "bg-transparent border border-white/15 text-white hover:border-white/35 hover:bg-white/4"
+                    }`}
+                >
+                  {plan.cta}
+                </button>
               </div>
-
-              <div className="h-px bg-white/10 mb-6" />
-
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm">
-                    <Check size={14} className="text-white/60 flex-shrink-0" />
-                    <span className="text-white/70">{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={scrollToContact}
-                className={`w-full py-3 rounded-full text-sm font-semibold transition-all duration-200 group-hover:scale-105 ${
-                  plan.popular
-                    ? "bg-white text-black hover:bg-white/90"
-                    : "border border-white/20 text-white hover:border-white/50 hover:bg-white/5"
-                }`}
-              >
-                {plan.cta}
-              </button>
             </div>
           ))}
         </div>
