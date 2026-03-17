@@ -51,19 +51,24 @@ export default function ProcessSection() {
     const onScroll = () => {
       const rect = section.getBoundingClientRect();
       const windowH = window.innerHeight;
-      // Progress: 0 when section top enters viewport, 1 when section bottom exits
-      const start = windowH * 0.7;
-      const end = -rect.height + windowH * 0.3;
+      // Complete the animation when section bottom is still 65% of viewport in view
+      // so the last step is fully visible before user scrolls past
+      const start = windowH * 0.75;
+      const end = -rect.height + windowH * 0.65;
       const scrollInSection = start - rect.top;
       const totalScrollable = start - end;
-      const progress = Math.min(1, Math.max(0, scrollInSection / totalScrollable));
+      const rawProgress = Math.min(1, Math.max(0, scrollInSection / totalScrollable));
 
-      setPathProgress(progress);
-      const offset = totalLength * (1 - progress);
+      // Draw the path 18% ahead of scroll so the line always leads
+      const drawProgress = Math.min(1, rawProgress * 1.18);
+
+      setPathProgress(drawProgress);
+      const offset = totalLength * (1 - drawProgress);
       path.style.strokeDashoffset = `${offset}`;
 
-      // Activate steps based on progress
-      const stepIndex = Math.floor(progress * steps.length) - 1;
+      // Activate steps slightly ahead of path — step lights up before line finishes reaching it
+      const stepProgress = Math.min(1, rawProgress * 1.25);
+      const stepIndex = Math.ceil(stepProgress * steps.length) - 1;
       setActiveStep(stepIndex);
     };
 
