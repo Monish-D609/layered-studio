@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Layered Studio"
+version = "1.0.0"
+id = "artifacts/layered-studio"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 21916
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/layered-studio run dev"
+
+[services.env]
+PORT = "21916"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/layered-studio", "run", "build"]
+publicDir = "artifacts/layered-studio/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

@@ -1,0 +1,349 @@
+Build a modern, high-conversion portfolio website for a web design & development agency called “Layered Studio.”
+
+The design style should be:
+
+Dark theme (black background, white typography, grey accents)
+
+Minimal, premium, product-focused
+
+Strong typography (large bold sans-serif, similar to Stripe / Linear / modern SaaS sites)
+
+Smooth animations and micro-interactions
+
+Grid-based subtle background (very low opacity)
+
+🧱 STRUCTURE
+1. Sticky Header / Navbar
+
+Transparent → becomes slightly blurred/dark on scroll
+
+Centered nav items:
+
+Capabilities
+
+Process
+
+Work
+
+Pricing
+
+About
+
+Contact
+
+Clicking scrolls smoothly to respective sections
+
+Left: “Layered Studio” logo text
+
+🚀 2. HERO SECTION
+Headline (Dominant)
+
+“We Build Websites
+That Feel Like Products.”
+
+Multi-line stacked layout
+
+Extremely large bold font
+
+Tight line height
+
+White text on black
+
+Subheading
+
+“Layered Studio designs and develops powerful websites for startups and businesses that want to stand out online.”
+
+Smaller grey text
+
+Max width: ~600px
+
+CTA Buttons
+
+Primary: “Start Your Project” (filled white button)
+
+Secondary: “View Work” (outlined button)
+
+Background
+
+Subtle grid pattern
+
+Slight radial gradient glow
+
+🧠 3. CAPABILITIES SECTION
+
+Title: “Capabilities”
+
+Create 3 clean cards:
+
+Custom Websites
+High-performance responsive websites built from scratch with modern frameworks and pixel-perfect design.
+
+Full Stack Development
+Complete frontend, backend, and database solutions engineered for scale and reliability.
+
+Business Websites
+Professional websites designed to attract customers, build trust, and drive conversions.
+
+Design:
+
+Glassmorphism / soft border cards
+
+Hover → slight glow + lift
+
+⚙️ 4. PROCESS SECTION (IMPORTANT – INTERACTIVE)
+
+Title: “Process”
+
+Steps:
+01 Discovery
+02 Strategy
+03 Design
+04 Development
+05 Launch
+06 Support
+
+Animation Requirement:
+
+Scroll-based animation (GSAP / Framer Motion)
+
+As user scrolls DOWN:
+
+Steps animate sequentially (fade + slide or progress line)
+
+As user scrolls UP:
+
+Animation reverses (must feel “undoable”)
+
+Optional:
+
+Vertical progress line that fills/unfills
+
+This section should feel alive and dynamic.
+
+🎯 5. PORTFOLIO SECTION
+
+Title: “Selected Work”
+
+Use dummy projects
+
+Card-based layout (center-focused, slight 3D feel)
+
+One main card in focus, others blurred in background
+
+Example:
+
+Tech Startup Website — Vertex Labs
+
+SaaS Dashboard — Orbit
+
+AI Platform — NeuralFlow
+
+Each card:
+
+Project type (small label)
+
+Name
+
+Short description
+
+Hover:
+
+Scale up + sharpen
+
+💰 6. PRICING SECTION
+
+3 pricing cards:
+
+Starter Website
+
+₹30,000 – ₹35,000
+Includes:
+
+Custom UI Layout
+
+Responsive Design
+
+Basic Animations
+
+SEO Setup
+
+Deployment
+
+Professional Website (MOST POPULAR)
+
+₹55,000 – ₹60,000
+Includes:
+
+Premium UI/UX Design
+
+Advanced Animations
+
+Frontend Development
+
+Backend Integration
+
+Database Setup
+
+Mobile Optimization
+
+Deployment
+
+Premium Experience
+
+₹70,000+
+Includes:
+
+Fully Custom Design System
+
+Cinematic Animations
+
+Interactive Scroll Effects
+
+Performance Optimization
+
+Backend + Database Architecture
+
+SEO Optimization
+
+Priority Support
+
+Interaction:
+
+Clicking ANY pricing card → scroll to Contact Section
+
+📩 7. CONTACT / PROJECT FORM SECTION
+
+Title:
+“Ready to Build Your Vision Online?”
+
+Form Fields:
+
+Full Name
+
+Email Address
+
+Contact Number
+
+Estimated Budget Range (Dropdown):
+
+₹30,000 – ₹35,000
+
+₹55,000 – ₹60,000
+
+₹70,000+
+
+Custom Budget
+
+Not sure yet
+
+Message / Project Details (Optional)
+
+📅 Schedule a Call Feature
+
+Button: “Pick a Date”
+
+Opens date picker
+
+After selecting date → show time slots:
+
+9:00 AM – 10:00 AM
+
+10:00 AM – 11:00 AM
+
+...
+
+9:00 PM – 10:00 PM
+
+User selects one time slot
+
+📧 Form Submission Logic
+
+On submit:
+
+Send all form data to:
+monishpersonal609@gmail.com
+
+Include:
+
+Name
+
+Email
+
+Phone
+
+Budget
+
+Message
+
+Selected Date
+
+Selected Time
+
+Use:
+
+EmailJS OR backend API (Node/Express)
+
+🧾 8. FOOTER
+
+Minimal, clean
+
+Left: Layered Studio
+
+Right:
+
+Links (Capabilities, Work, Pricing, Contact)
+
+Bottom text:
+“© 2026 Layered Studio. All rights reserved.”
+
+🎨 DESIGN SYSTEM
+
+Font: Inter / Satoshi / General Sans
+
+Border radius: 12–20px
+
+Spacing: generous padding (80–120px sections)
+
+Animations:
+
+Smooth easing (cubic-bezier)
+
+Hover transitions
+
+Buttons:
+
+Subtle scale on hover
+
+Soft shadows
+
+⚡ TECH STACK (IMPORTANT)
+
+Use:
+
+React + Tailwind CSS
+
+Framer Motion (animations)
+
+Optional: GSAP for scroll animations
+
+Fully responsive
+
+🎯 FINAL GOAL
+
+The website should feel like:
+
+A premium product landing page
+
+Not a typical agency site
+
+Clean, bold, and conversion-focused
+
+💡 Optional Enhancements (if AI supports)
+
+Cursor glow effect
+
+Magnetic buttons
+
+Section reveal animations
+
+Smooth scroll (Lenis)
