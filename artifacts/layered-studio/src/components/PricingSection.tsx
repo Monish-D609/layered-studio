@@ -123,16 +123,16 @@ export default function PricingSection() {
 
                 {/* Price */}
                 <div className="mb-1">
-                  <div className="flex items-baseline gap-1 flex-wrap">
-                    <span className={`font-black tracking-tight leading-none ${plan.popular ? "text-4xl text-white" : "text-3xl text-white"}`}>
+                  <div className="flex items-baseline gap-1 whitespace-nowrap">
+                    <span className="text-2xl font-black tracking-tight leading-none text-white">
                       {plan.price}
                     </span>
-                    <span className={`font-black tracking-tight leading-none ${plan.popular ? "text-4xl text-white" : "text-3xl text-white"}`}>
+                    <span className="text-2xl font-black tracking-tight leading-none text-white/70">
                       {plan.priceSuffix}
                     </span>
                   </div>
                   {plan.subtext && (
-                    <p className="text-white/35 text-xs mt-1.5">{plan.subtext}</p>
+                    <p className="text-white/30 text-xs mt-1.5">{plan.subtext}</p>
                   )}
                 </div>
 
