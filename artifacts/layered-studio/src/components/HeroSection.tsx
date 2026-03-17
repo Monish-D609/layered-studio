@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 
 export default function HeroSection() {
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const subRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   const scrollTo = (href: string) => {
     const el = document.querySelector(href);
@@ -9,71 +11,102 @@ export default function HeroSection() {
   };
 
   useEffect(() => {
-    const el = headingRef.current;
-    if (!el) return;
-    const timer = setTimeout(() => {
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0)";
-    }, 100);
-    return () => clearTimeout(timer);
+    const delays = [
+      { el: headingRef.current, delay: 100 },
+      { el: subRef.current, delay: 400 },
+      { el: ctaRef.current, delay: 650 },
+    ];
+    const timers = delays.map(({ el, delay }) =>
+      setTimeout(() => {
+        if (el) {
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0)";
+        }
+      }, delay)
+    );
+    return () => timers.forEach(clearTimeout);
   }, []);
 
+  const fadeUp = {
+    opacity: 0,
+    transform: "translateY(32px)",
+    transition: "opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1)",
+  };
+
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 overflow-hidden grid-bg hero-glow">
-      <div className="max-w-7xl mx-auto w-full">
-        <div className="max-w-3xl">
-          <div className="section-label mb-8 reveal visible" style={{ transitionDelay: "0.1s" }}>
-            Web Design & Development Agency
-          </div>
+    <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-20 overflow-hidden grid-bg hero-glow">
+      <div className="max-w-6xl mx-auto w-full">
 
-          <h1
-            ref={headingRef}
-            className="text-[clamp(2.8rem,6.5vw,6.5rem)] font-extrabold leading-[0.95] text-white mb-8"
-            style={{ opacity: 0, transform: "translateY(40px)", transition: "opacity 0.9s ease, transform 0.9s ease" }}
+        {/* Label */}
+        <div
+          className="section-label mb-10"
+          style={{ ...fadeUp, opacity: 1, transform: "translateY(0)", transition: "none" }}
+        >
+          Web Design &amp; Development Agency
+        </div>
+
+        {/* Headline */}
+        <h1
+          ref={headingRef}
+          style={fadeUp}
+          className="font-extrabold text-white mb-8"
+        >
+          <span
+            className="block"
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}
           >
-            We Build
-            <br />
-            Websites
-            <br />
+            We Build Websites
+          </span>
+          <span
+            className="block"
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}
+          >
             That Feel Like
-            <br />
-            Products.
-          </h1>
-
-          <p
-            className="text-white/50 text-lg max-w-xl mb-12 reveal visible"
-            style={{ transitionDelay: "0.4s" }}
+          </span>
+          <span
+            className="block"
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}
           >
-            Layered Studio designs and develops powerful websites for startups
-            and businesses that want to stand out online.
-          </p>
+            Products.
+          </span>
+        </h1>
 
-          <div className="flex flex-wrap gap-4 reveal visible" style={{ transitionDelay: "0.6s" }}>
-            <button
-              onClick={() => scrollTo("#contact")}
-              className="btn-primary px-8 py-4 rounded-full font-semibold text-sm"
-            >
-              Start Your Project
-            </button>
-            <button
-              onClick={() => scrollTo("#work")}
-              className="btn-outline px-8 py-4 rounded-full font-semibold text-sm"
-            >
-              View Work
-            </button>
-          </div>
+        {/* Subheading */}
+        <p
+          ref={subRef}
+          style={fadeUp}
+          className="text-white/45 text-base md:text-lg max-w-md mb-12 leading-relaxed"
+        >
+          Layered Studio designs and develops powerful websites for startups and
+          businesses that want to stand out online.
+        </p>
+
+        {/* CTAs */}
+        <div ref={ctaRef} style={fadeUp} className="flex flex-wrap gap-4">
+          <button
+            onClick={() => scrollTo("#contact")}
+            className="btn-primary px-8 py-3.5 rounded-full font-semibold text-sm"
+          >
+            Start Your Project
+          </button>
+          <button
+            onClick={() => scrollTo("#work")}
+            className="btn-outline px-8 py-3.5 rounded-full font-semibold text-sm"
+          >
+            View Work
+          </button>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-bounce">
-        <div className="w-px h-12 bg-gradient-to-b from-white/30 to-transparent" />
-        <span className="text-white/20 text-xs tracking-widest">SCROLL</span>
+        <div className="w-px h-10 bg-gradient-to-b from-white/25 to-transparent" />
+        <span className="text-white/20 text-[10px] tracking-[0.25em]">SCROLL</span>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full bg-white/[0.01] blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-white/[0.02] blur-3xl pointer-events-none" />
+      {/* Ambient glows */}
+      <div className="absolute top-1/3 right-0 w-[600px] h-[600px] rounded-full bg-white/[0.015] blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/3 w-[300px] h-[300px] rounded-full bg-white/[0.02] blur-3xl pointer-events-none" />
     </section>
   );
 }
