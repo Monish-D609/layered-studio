@@ -1,3 +1,5 @@
+import Logo from "@/components/Logo";
+
 const links = [
   { label: "Capabilities", href: "#capabilities" },
   { label: "Work", href: "#work" },
@@ -15,9 +17,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-10">
           <div>
-            <div className="text-white font-semibold text-lg mb-2">
-              Layered Studio
-            </div>
+            <Logo size={28} className="mb-3" />
             <p className="text-white/30 text-sm max-w-xs">
               Premium web design & development for brands that demand excellence.
             </p>

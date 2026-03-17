@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Logo from "@/components/Logo";
 
 const navLinks = [
   { label: "Capabilities", href: "#capabilities" },
@@ -31,7 +32,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <span className="text-white font-semibold text-lg tracking-tight">Layered Studio</span>
+        <Logo size={28} />
 
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map(link => (
