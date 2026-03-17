@@ -28,7 +28,7 @@ export default function HeroSection() {
 
           <h1
             ref={headingRef}
-            className="text-[clamp(3rem,8vw,7rem)] font-black leading-[0.95] tracking-tight text-white mb-8"
+            className="text-[clamp(2.2rem,4.8vw,5rem)] font-black leading-[0.95] tracking-tight text-white mb-8"
             style={{ opacity: 0, transform: "translateY(40px)", transition: "opacity 0.9s ease, transform 0.9s ease" }}
           >
             We Build
