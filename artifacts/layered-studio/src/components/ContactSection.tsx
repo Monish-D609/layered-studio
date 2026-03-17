@@ -54,7 +54,7 @@ export default function ContactSection() {
     budget: "",
     message: "",
   });
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState<{ label: string; value: string } | null>(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -79,7 +79,7 @@ export default function ContactSection() {
       // Build mailto as fallback (EmailJS requires a service ID)
       const subject = encodeURIComponent("New Project Inquiry — Layered Studio");
       const body = encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nBudget: ${form.budget}\nMessage: ${form.message}\nScheduled Date: ${selectedDate || "Not selected"}\nScheduled Time: ${selectedTime || "Not selected"}`
+        `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nBudget: ${form.budget}\nMessage: ${form.message}\nScheduled Date: ${selectedDate?.label || "Not selected"}\nScheduled Time: ${selectedTime || "Not selected"}`
       );
       window.location.href = `mailto:monishpersonal609@gmail.com?subject=${subject}&body=${body}`;
       setSent(true);
@@ -237,9 +237,9 @@ export default function ContactSection() {
                   <button
                     key={date.value}
                     type="button"
-                    onClick={() => setSelectedDate(date.value)}
+                    onClick={() => setSelectedDate(date)}
                     className={`time-slot text-xs ${
-                      selectedDate === date.value ? "selected" : ""
+                      selectedDate?.value === date.value ? "selected" : ""
                     }`}
                   >
                     {date.label}
@@ -249,7 +249,7 @@ export default function ContactSection() {
             </div>
 
             {/* Time slots */}
-            {selectedDate && (
+            {selectedDate?.value && (
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Clock size={14} className="text-white/40" />
@@ -276,7 +276,7 @@ export default function ContactSection() {
               <div className="mt-6 p-4 bg-white/5 border border-white/10 rounded-xl">
                 <p className="text-white/60 text-sm">
                   <span className="text-white font-semibold">Scheduled: </span>
-                  {selectedDate} at {selectedTime}
+                  {selectedDate.label} at {selectedTime}
                 </p>
                 <p className="text-white/30 text-xs mt-1">
                   Include this in your form submission above.

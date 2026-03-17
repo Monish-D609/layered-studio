@@ -94,10 +94,6 @@ export default function WorkSection() {
                     {proj.desc}
                   </p>
 
-                  <div className="mt-6 flex items-center gap-2 text-white/40 text-xs">
-                    <span className="w-4 h-px bg-white/30" />
-                    <span>View Project</span>
-                  </div>
                 </div>
               </div>
 
