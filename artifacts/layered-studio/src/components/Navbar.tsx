@@ -34,12 +34,12 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Logo size={28} />
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-1 border border-white/10 rounded-full px-2 py-1.5 backdrop-blur-sm bg-white/[0.03]">
           {navLinks.map(link => (
             <button
               key={link.label}
               onClick={() => scrollTo(link.href)}
-              className="text-sm text-white/50 hover:text-white transition-colors duration-200"
+              className="text-sm text-white/50 hover:text-white hover:bg-white/8 transition-all duration-200 px-4 py-1.5 rounded-full"
             >
               {link.label}
             </button>
