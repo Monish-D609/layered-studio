@@ -127,7 +127,7 @@ export default function PricingSection() {
                     <span className="text-2xl font-black tracking-tight leading-none text-white">
                       {plan.price}
                     </span>
-                    <span className="text-2xl font-black tracking-tight leading-none text-white/70">
+                    <span className="text-2xl font-black tracking-tight leading-none text-white">
                       {plan.priceSuffix}
                     </span>
                   </div>
