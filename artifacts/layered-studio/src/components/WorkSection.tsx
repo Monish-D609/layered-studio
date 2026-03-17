@@ -53,7 +53,7 @@ export default function WorkSection() {
 
   return (
     <section id="work" className="py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 mb-16">
+      <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
         <div className="section-label mb-4">Portfolio</div>
         <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
           Selected Work

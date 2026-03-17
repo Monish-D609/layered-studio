@@ -109,14 +109,14 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16">
+        <div className="mb-16 text-center">
           <div className="section-label mb-4">Get In Touch</div>
           <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
             Ready to Build
             <br />
             Your Vision Online?
           </h2>
-          <p className="text-white/40 mt-4 text-lg max-w-md">
+          <p className="text-white/40 mt-4 text-lg max-w-md mx-auto">
             Tell us about your project and we'll craft a plan that brings it to life.
           </p>
         </div>

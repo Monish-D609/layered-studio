@@ -78,7 +78,7 @@ export default function PricingSection() {
   return (
     <section id="pricing" className="py-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16">
+        <div className="mb-16 text-center">
           <div className="section-label mb-4">Investment</div>
           <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
             Pricing

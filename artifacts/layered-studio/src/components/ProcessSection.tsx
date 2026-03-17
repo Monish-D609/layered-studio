@@ -109,12 +109,12 @@ export default function ProcessSection() {
       style={{ minHeight: "200vh" }}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="mb-20 reveal">
+        <div className="mb-20 reveal text-center">
           <div className="section-label mb-4">How We Work</div>
           <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
             Process
           </h2>
-          <p className="text-white/40 mt-4 text-lg max-w-md">
+          <p className="text-white/40 mt-4 text-lg max-w-md mx-auto">
             A structured approach that delivers exceptional results, every time.
           </p>
         </div>

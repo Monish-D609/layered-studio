@@ -36,12 +36,10 @@ const allTestimonials = [...testimonials, ...testimonials];
 export default function TestimonialsSection() {
   return (
     <section id="about" className="py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 mb-16">
+      <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
         <div className="section-label mb-4">Testimonials</div>
         <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
-          What Clients
-          <br />
-          Say
+          What Clients Say
         </h2>
       </div>
 
