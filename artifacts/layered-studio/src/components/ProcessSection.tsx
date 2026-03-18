@@ -150,7 +150,7 @@ export default function ProcessSection() {
               viewBox={`0 0 100 ${TOTAL_H}`}
               className="w-full"
               style={{ height: TOTAL_H, filter: "drop-shadow(0 0 6px rgba(255,255,255,0.12))", overflow: "visible" }}
-              preserveAspectRatio="xMidYTop meet"
+              preserveAspectRatio="xMidYMin meet"
             >
               {/* Dim ghost path */}
               <path
