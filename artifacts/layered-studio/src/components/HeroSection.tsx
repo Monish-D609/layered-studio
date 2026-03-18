@@ -49,7 +49,7 @@ export default function HeroSection() {
         <h1
           ref={headingRef}
           style={fadeUp}
-          className="font-black text-white mb-8"
+          className="font-bold text-white mb-8"
         >
           <span
             className="block"

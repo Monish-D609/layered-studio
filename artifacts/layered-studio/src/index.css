@@ -46,7 +46,7 @@
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
   --app-font-sans: 'Inter', sans-serif;
-  --app-font-display: 'Inter', sans-serif;
+  --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
 }
 
@@ -65,8 +65,8 @@
   }
   h1, h2, h3 {
     font-family: var(--app-font-display);
-    font-weight: 900;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
