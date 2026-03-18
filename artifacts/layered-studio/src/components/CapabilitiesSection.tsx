@@ -58,22 +58,24 @@ export default function CapabilitiesSection() {
           {capabilities.map((cap) => (
             <div
               key={cap.number}
-              className="glass-card rounded-2xl p-8 reveal"
+              className="glass-card rounded-2xl p-8 reveal transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:bg-white/5 group border border-transparent hover:border-white/10 relative overflow-hidden"
             >
-              <div className="text-white/20 text-xs font-mono mb-6">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 text-white/20 group-hover:text-white/40 transition-colors duration-300 text-xs font-mono mb-6">
                 {cap.number}
               </div>
-              <h3 className="text-white text-2xl font-bold mb-4">
+              <h3 className="relative z-10 text-white text-2xl font-bold mb-4 group-hover:-translate-y-1 transition-transform duration-300">
                 {cap.title}
               </h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-8">
+              <p className="relative z-10 text-white/50 text-sm leading-relaxed mb-8 group-hover:text-white/70 transition-colors duration-300">
                 {cap.description}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="relative z-10 flex flex-wrap gap-2">
                 {cap.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs text-white/40 border border-white/10 rounded-full px-3 py-1"
+                    className="text-xs text-white/40 border border-white/10 rounded-full px-3 py-1 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/70 group-hover:border-white/20"
                   >
                     {tag}
                   </span>

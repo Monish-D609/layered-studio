@@ -2,9 +2,9 @@ import { useState } from "react";
 import { CalendarDays, Clock } from "lucide-react";
 
 const budgets = [
-  "₹30,000 – ₹35,000 (Starter)",
-  "₹55,000 – ₹60,000 (Professional)",
-  "₹70,000+ (Premium)",
+  "₹4,000 – ₹5,000 (Starter)",
+  "₹6,000 – ₹12,000 (Professional)",
+  "₹15,000+ (Premium)",
   "Custom Budget",
   "Not sure yet",
 ];
@@ -76,15 +76,28 @@ export default function ContactSection() {
     setError("");
 
     try {
-      // Build mailto as fallback (EmailJS requires a service ID)
-      const subject = encodeURIComponent("New Project Inquiry — Layered Studio");
-      const body = encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nBudget: ${form.budget}\nMessage: ${form.message}\nScheduled Date: ${selectedDate?.label || "Not selected"}\nScheduled Time: ${selectedTime || "Not selected"}`
-      );
-      window.location.href = `mailto:monishpersonal609@gmail.com?subject=${subject}&body=${body}`;
-      setSent(true);
+      const apiUrl = import.meta.env.DEV ? "http://localhost:5000/send-email" : "/api/send-email";
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.name,
+          email: form.email,
+          phone: form.phone,
+          budget: form.budget,
+          projectDetails: form.message,
+          selectedDate: selectedDate?.label,
+          selectedTime: selectedTime,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSent(true);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Could not reach the server. Please try again.");
     } finally {
       setSending(false);
     }
@@ -238,9 +251,8 @@ export default function ContactSection() {
                     key={date.value}
                     type="button"
                     onClick={() => setSelectedDate(date)}
-                    className={`time-slot text-xs ${
-                      selectedDate?.value === date.value ? "selected" : ""
-                    }`}
+                    className={`time-slot text-xs ${selectedDate?.value === date.value ? "selected" : ""
+                      }`}
                   >
                     {date.label}
                   </button>
@@ -261,9 +273,8 @@ export default function ContactSection() {
                       key={slot}
                       type="button"
                       onClick={() => setSelectedTime(slot)}
-                      className={`time-slot ${
-                        selectedTime === slot ? "selected" : ""
-                      }`}
+                      className={`time-slot ${selectedTime === slot ? "selected" : ""
+                        }`}
                     >
                       {slot}
                     </button>

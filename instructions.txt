@@ -1,0 +1,213 @@
+PROJECT: Layered Studio – Lead Capture Form Backend
+
+OBJECTIVE:
+Currently i have developed the full frontend. But all i need you to do i integrate the Cal to Action section when a form must be submitted and i must recieve the form and all its details to my gmail inbox. Further details are below.
+When ANY user submits the form, the backend must send an email
+FROM: layeredstudio.in@gmail.com
+TO: layeredstudio.in@gmail.com
+
+The user DOES NOT send the email.
+The user DOES NOT give any permissions.
+The backend handles everything.
+
+---
+
+SYSTEM FLOW:
+
+User fills form →
+Clicks "Send Message" →
+Frontend sends POST request →
+Backend receives data →
+Backend sends email using YOUR Gmail →
+Email lands in your inbox
+
+---
+
+FORM FIELDS (FROM UI):
+
+Required:
+- fullName
+- email
+- phone
+- budget
+
+Optional:
+- projectDetails
+
+Schedule Section:
+- selectedDate
+- selectedTime
+
+---
+
+REQUEST BODY FORMAT:
+
+{
+  "fullName": "Rohan Sharma",
+  "email": "rohan@company.com",
+  "phone": "+919876543210",
+  "budget": "₹50K–₹1L",
+  "projectDetails": "Need a website",
+  "selectedDate": "Thu, 26 Mar",
+  "selectedTime": "3:00 PM – 4:00 PM"
+}
+
+---
+
+BACKEND SETUP (NODE.JS – EXPRESS + NODEMAILER)
+
+1. Install dependencies:
+   npm install express nodemailer cors dotenv
+
+2. Create:
+   - server.js
+   - .env
+
+3. .env configuration:
+
+   EMAIL_USER=layeredstudio.in@gmail.com
+   EMAIL_PASS=ndic yfox utuk rffq
+
+---
+
+GMAIL SETUP (MANDATORY):
+
+1. Go to Google Account → Security
+2. Enable 2-Step Verification
+3. Generate App Password
+4. Use App Password in .env
+
+DO NOT use your real Gmail password.
+
+---
+
+SERVER CONFIGURATION:
+
+- Use express.json()
+- Enable CORS
+
+---
+
+EMAIL TRANSPORTER CONFIG:
+
+Service: Gmail SMTP
+
+host: smtp.gmail.com
+port: 465
+secure: true
+
+auth:
+  user: process.env.EMAIL_USER
+  pass: process.env.EMAIL_PASS
+
+---
+
+API ENDPOINT:
+
+POST /send-email
+
+---
+
+LOGIC INSIDE ENDPOINT:
+
+1. Extract:
+   fullName, email, phone, budget,
+   projectDetails, selectedDate, selectedTime
+
+2. Validate:
+   - fullName, email, phone, budget must exist
+
+3. Construct email
+
+---
+
+EMAIL DETAILS:
+
+FROM: layeredstudio.in@gmail.com
+TO: layeredstudio.in@gmail.com
+
+Subject:
+New Client Inquiry – Layered Studio
+
+Body:
+
+----------------------------------------
+NEW FORM SUBMISSION
+
+Client Details:
+Name: {fullName}
+Email: {email}
+Phone: {phone}
+
+Project Info:
+Budget: {budget}
+Details: {projectDetails || "Not provided"}
+
+Call Schedule:
+Date: {selectedDate || "Not selected"}
+Time: {selectedTime || "Not selected"}
+----------------------------------------
+
+IMPORTANT:
+The "email" field from the user is ONLY included in the body.
+It is NOT used to send the email.
+
+---
+
+SEND EMAIL:
+
+Use transporter.sendMail()
+
+---
+
+RESPONSE:
+
+Success:
+{
+  success: true
+}
+
+Failure:
+{
+  success: false
+}
+
+---
+
+FRONTEND CONNECTION:
+
+On button click:
+
+fetch("http://localhost:5000/send-email", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    fullName,
+    email,
+    phone,
+    budget,
+    projectDetails,
+    selectedDate,
+    selectedTime
+  })
+})
+
+---
+
+SECURITY BEST PRACTICES:
+
+- Use .env (never hardcode credentials)
+- Validate inputs
+- Optional: rate limiting
+
+---
+
+FINAL RESULT:
+
+✔ User submits form
+✔ No login or permissions required
+✔ Backend sends email
+✔ You receive full lead details instantly
+✔ Clean, structured format in inbox
