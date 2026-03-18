@@ -48,10 +48,10 @@ export default function Logo({ size = 32, showText = true, className = "" }: Log
       {showText && (
         <span
           style={{
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "var(--app-font-display)",
             fontWeight: 700,
-            fontSize: "15px",
-            letterSpacing: "-0.02em",
+            fontSize: "14px",
+            letterSpacing: "-0.03em",
             color: "white",
             lineHeight: 1,
           }}
