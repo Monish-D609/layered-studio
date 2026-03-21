@@ -80,10 +80,10 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
         {/* ===== ANIMATED LOGO: 4 stacked rounded rectangles ===== */}
         <div
-          className="relative mb-10"
+          className="relative mb-14"
           style={{
-            width: "72px",
-            height: "72px",
+            width: "140px",
+            height: "140px",
             filter: phase >= 5
               ? "drop-shadow(0 0 25px rgba(255,255,255,0.3))"
               : "none",
@@ -95,15 +95,15 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
               key={i}
               className="absolute transition-all ease-out"
               style={{
-                width: "42px",
-                height: "28px",
-                borderRadius: "7px",
+                width: "84px",
+                height: "56px",
+                borderRadius: "14px",
                 backgroundColor: layer.color,
-                bottom: `${12 + i * 2}px`,
-                left: `${6 + layer.x}px`,
+                bottom: `${24 + i * 4}px`,
+                left: `${12 + layer.x * 2}px`,
                 transform: phase >= 1
-                  ? `translateY(${layer.y}px) scale(1)`
-                  : `translateY(40px) scale(0.7)`,
+                  ? `translateY(${layer.y * 2}px) scale(1)`
+                  : `translateY(80px) scale(0.7)`,
                 opacity: phase >= 1 ? 1 : 0,
                 transitionDuration: "700ms",
                 transitionDelay: `${layer.delay}ms`,
@@ -119,7 +119,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         {/* ===== BRAND NAME: letter-by-letter reveal ===== */}
         <div className="relative overflow-hidden">
           <h1
-            className="text-[2.6rem] md:text-[3.4rem] text-white"
+            className="text-[4rem] md:text-[6.5rem] lg:text-[7.5rem] text-white"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontWeight: 700,
@@ -174,12 +174,12 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
         {/* DIGITAL STUDIO subtitle */}
         <p
-          className="mt-5 text-[10px] tracking-[0.4em] uppercase text-white/35"
+          className="mt-8 text-[12px] md:text-[14px] tracking-[0.5em] uppercase text-white/35"
           style={{
             fontFamily: "'Inter', sans-serif",
             fontWeight: 400,
             opacity: phase >= 4 ? 1 : 0,
-            transform: phase >= 4 ? "translateY(0)" : "translateY(8px)",
+            transform: phase >= 4 ? "translateY(0)" : "translateY(12px)",
             transition: "all 0.7s ease",
             transitionDelay: "200ms",
           }}

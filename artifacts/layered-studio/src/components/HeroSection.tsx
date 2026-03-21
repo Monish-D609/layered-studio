@@ -1,4 +1,59 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+function MagnetButton({
+  children,
+  onClick,
+  variant = "primary",
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  variant?: "primary" | "secondary";
+}) {
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const isPrimary = variant === "primary";
+
+  return (
+    <button
+      ref={btnRef}
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[12px] font-bold tracking-[0.15em] transition-colors duration-300 border ${
+        isPrimary
+          ? "bg-white border-white"
+          : "bg-transparent border-[#222]"
+      }`}
+      style={{ cursor: "pointer" }}
+    >
+      {/* Background Hover Circle */}
+      <div
+        className="absolute w-[180px] h-[180px] rounded-full pointer-events-none transition-opacity duration-300 z-0"
+        style={{
+          left: pos.x - 90,
+          top: pos.y - 90,
+          opacity: hovering ? 1 : 0,
+          background: isPrimary ? "#161616" : "#e5e5e5",
+          transform: `scale(${hovering ? 1 : 0})`,
+          transition: "transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s",
+        }}
+      />
+      {/* Text with Difference Blending to auto-invert against the background */}
+      <span className="relative z-10 mix-blend-difference text-white pointer-events-none">
+        {children}
+      </span>
+    </button>
+  );
+}
 
 export default function HeroSection() {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -83,18 +138,12 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div ref={ctaRef} style={fadeUp} className="flex flex-wrap gap-4">
-          <button
-            onClick={() => scrollTo("#contact")}
-            className="btn-primary px-8 py-3.5 rounded-full font-semibold text-sm"
-          >
+          <MagnetButton variant="primary" onClick={() => scrollTo("#contact")}>
             Start Your Project
-          </button>
-          <button
-            onClick={() => scrollTo("#work")}
-            className="btn-outline px-8 py-3.5 rounded-full font-semibold text-sm"
-          >
+          </MagnetButton>
+          <MagnetButton variant="secondary" onClick={() => scrollTo("#work")}>
             View Work
-          </button>
+          </MagnetButton>
         </div>
       </div>
 
@@ -110,3 +159,4 @@ export default function HeroSection() {
     </section>
   );
 }
+
