@@ -10,13 +10,43 @@ function MagnetButton({
   variant?: "primary" | "secondary";
 }) {
   const btnRef = useRef<HTMLButtonElement>(null);
+  const baseRect = useRef<DOMRect | null>(null);
+
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [hovering, setHovering] = useState(false);
 
+  const handleMouseEnter = () => {
+    setHovering(true);
+    if (btnRef.current) {
+      baseRect.current = btnRef.current.getBoundingClientRect();
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!btnRef.current) return;
-    const rect = btnRef.current.getBoundingClientRect();
+    if (!baseRect.current) return;
+    
+    // Calculate off the static un-transformed dimensions captured at mouse enter
+    // This prevents the button from "jittering" as its own movement changes the bounding rect
+    const rect = baseRect.current;
+    
+    // Position inside the original un-shifted bounding box for the spotlight
     setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+
+    // Physical button stickiness - calculates delta from the exact center of the button
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    setTranslate({
+      x: (e.clientX - centerX) * 0.25, // 0.25 stickiness factor
+      y: (e.clientY - centerY) * 0.25,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setHovering(false);
+    setTranslate({ x: 0, y: 0 }); // snap back to pure center
+    baseRect.current = null;
   };
 
   const isPrimary = variant === "primary";
@@ -26,14 +56,21 @@ function MagnetButton({
       ref={btnRef}
       onClick={onClick}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
-      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[12px] font-bold tracking-[0.15em] transition-colors duration-300 border ${
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[12px] font-bold tracking-[0.15em] border ${
         isPrimary
           ? "bg-white border-white"
           : "bg-transparent border-[#222]"
       }`}
-      style={{ cursor: "pointer" }}
+      style={{
+        cursor: "pointer",
+        transform: `translate(${translate.x}px, ${translate.y}px)`,
+        // Instant/linear tracking while hovering, smoothly snapping spring while exiting
+        transition: hovering 
+          ? "transform 0.1s linear, background-color 0.3s, border-color 0.3s"
+          : "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s, border-color 0.3s"
+      }}
     >
       {/* Background Hover Circle */}
       <div
