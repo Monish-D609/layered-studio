@@ -45,34 +45,62 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         transition: "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1)",
       }}
     >
-      {/* Subtle background grid */}
+      {/* Subtle background grid & Detailing */}
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           phase >= 1 ? "opacity-100" : "opacity-0"
         }`}
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-        }}
-      />
+      >
+        {/* Full-width horizontal split lines */}
+        <div className="absolute inset-0 flex flex-col justify-evenly pointer-events-none">
+          {[1, 2, 3, 4].map((line, i) => (
+            <div
+              key={line}
+              className="w-full h-px"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 50%, transparent)",
+                transform: phase >= 1 ? "scaleX(1)" : "scaleX(0)",
+                transformOrigin: "center",
+                transition: "transform 1.5s cubic-bezier(0.22, 1, 0.36, 1)",
+                transitionDelay: `${300 + i * 150}ms`,
+              }}
+            />
+          ))}
+        </div>
 
-      {/* Horizontal guide lines */}
-      <div className="absolute inset-0 flex flex-col justify-center pointer-events-none">
-        {[-80, 0, 80].map((offset) => (
-          <div
-            key={offset}
-            className={`h-px mx-auto transition-all ease-out ${
-              phase >= 1 ? "w-[280px] opacity-100" : "w-0 opacity-0"
-            }`}
-            style={{
-              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)",
-              transform: `translateY(${offset}px)`,
-              transitionDuration: "1200ms",
-              transitionDelay: `${200 + Math.abs(offset) * 2}ms`,
-            }}
-          />
-        ))}
+        {/* Top-Left Crop Mark */}
+        <div 
+          className="absolute top-8 left-8 md:top-12 md:left-12 w-16 h-16 md:w-24 md:h-24 pointer-events-none"
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.2)",
+            borderLeft: "1px solid rgba(255,255,255,0.2)",
+            transform: phase >= 1 ? "translate(0, 0)" : "translate(-20px, -20px)",
+            opacity: phase >= 1 ? 1 : 0,
+            transition: "all 1.2s cubic-bezier(0.22, 1, 0.36, 1) 400ms"
+          }}
+        />
+
+        {/* Bottom-Right Crop Mark */}
+        <div 
+          className="absolute bottom-8 right-8 md:bottom-12 md:right-12 w-16 h-16 md:w-24 md:h-24 pointer-events-none"
+          style={{
+            borderBottom: "1px solid rgba(255,255,255,0.2)",
+            borderRight: "1px solid rgba(255,255,255,0.2)",
+            transform: phase >= 1 ? "translate(0, 0)" : "translate(20px, 20px)",
+            opacity: phase >= 1 ? 1 : 0,
+            transition: "all 1.2s cubic-bezier(0.22, 1, 0.36, 1) 400ms"
+          }}
+        />
+
+        {/* Top-Right Faint Dot */}
+        <div 
+          className="absolute top-10 right-10 md:top-16 md:right-16 w-1.5 h-1.5 rounded-full bg-white/70 shadow-[0_0_10px_rgba(255,255,255,0.5)] pointer-events-none"
+          style={{
+            transform: phase >= 1 ? "scale(1)" : "scale(0)",
+            opacity: phase >= 1 ? 1 : 0,
+            transition: "all 1s cubic-bezier(0.34, 1.56, 0.64, 1) 800ms"
+          }}
+        />
       </div>
 
       {/* Center content */}
