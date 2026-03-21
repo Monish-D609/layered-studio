@@ -67,10 +67,10 @@ function App() {
 
   return (
     <>
+      <CustomCursor />
       {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
       <div className="min-h-screen bg-[#080808]">
         <StaggeredSection show={show} delay={100}>
-          <CustomCursor />
           <Navbar />
         </StaggeredSection>
         <main>
