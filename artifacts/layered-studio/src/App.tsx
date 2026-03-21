@@ -11,12 +11,38 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
+/** Wrapper that staggers each child section's entrance after loading */
+function StaggeredSection({
+  show,
+  delay,
+  children,
+}: {
+  show: boolean;
+  delay: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        opacity: show ? 1 : 0,
+        transform: show ? "translateY(0)" : "translateY(30px)",
+        transition: "opacity 0.6s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
+        transitionDelay: show ? `${delay}ms` : "0ms",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function App() {
   const [loading, setLoading] = useState(true);
 
   const handleLoadingComplete = useCallback(() => {
     setLoading(false);
   }, []);
+
+  const show = !loading;
 
   // Reveal on scroll for sections
   useEffect(() => {
@@ -42,27 +68,37 @@ function App() {
   return (
     <>
       {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
-      <div
-        className="min-h-screen bg-[#080808]"
-        style={{
-          opacity: loading ? 0 : 1,
-          transform: loading ? "translateY(-50px)" : "translateY(0)",
-          transition: "opacity 0.6s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
-          transitionDelay: loading ? "0ms" : "200ms",
-        }}
-      >
-        <CustomCursor />
-        <Navbar />
+      <div className="min-h-screen bg-[#080808]">
+        <StaggeredSection show={show} delay={100}>
+          <CustomCursor />
+          <Navbar />
+        </StaggeredSection>
         <main>
-          <HeroSection />
-          <CapabilitiesSection />
-          <ProcessSection />
-          <WorkSection />
-          <PricingSection />
-          <TestimonialsSection />
-          <ContactSection />
+          <StaggeredSection show={show} delay={200}>
+            <HeroSection />
+          </StaggeredSection>
+          <StaggeredSection show={show} delay={400}>
+            <CapabilitiesSection />
+          </StaggeredSection>
+          <StaggeredSection show={show} delay={520}>
+            <ProcessSection />
+          </StaggeredSection>
+          <StaggeredSection show={show} delay={640}>
+            <WorkSection />
+          </StaggeredSection>
+          <StaggeredSection show={show} delay={760}>
+            <PricingSection />
+          </StaggeredSection>
+          <StaggeredSection show={show} delay={880}>
+            <TestimonialsSection />
+          </StaggeredSection>
+          <StaggeredSection show={show} delay={1000}>
+            <ContactSection />
+          </StaggeredSection>
         </main>
-        <Footer />
+        <StaggeredSection show={show} delay={1120}>
+          <Footer />
+        </StaggeredSection>
       </div>
     </>
   );
