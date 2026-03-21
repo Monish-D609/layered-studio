@@ -82,7 +82,7 @@
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
-  z-index: 99999;
+  z-index: 9999999;
   transform: translate(-50%, -50%);
   transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
   mix-blend-mode: difference;
@@ -95,7 +95,7 @@
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
-  z-index: 99998;
+  z-index: 9999998;
   transform: translate(-50%, -50%);
   transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
