@@ -53,6 +53,7 @@
 @layer base {
   * {
     @apply border-border box-border;
+    cursor: none !important;
   }
   html {
     scroll-behavior: smooth;
