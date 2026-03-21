@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -11,8 +12,15 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  const handleLoadingComplete = useCallback(() => {
+    setLoading(false);
+  }, []);
+
   // Reveal on scroll for sections
   useEffect(() => {
+    if (loading) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -29,24 +37,32 @@ function App() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [loading]);
 
   return (
-    <div className="min-h-screen bg-[#080808]">
-      <CustomCursor />
-      <Navbar />
-      <main>
-        <HeroSection />
-        <CapabilitiesSection />
-        <ProcessSection />
-        <WorkSection />
-        <PricingSection />
-        <TestimonialsSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <>
+      {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
+      <div
+        className={`min-h-screen bg-[#080808] transition-opacity duration-500 ${
+          loading ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <CustomCursor />
+        <Navbar />
+        <main>
+          <HeroSection />
+          <CapabilitiesSection />
+          <ProcessSection />
+          <WorkSection />
+          <PricingSection />
+          <TestimonialsSection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 }
 
 export default App;
+
