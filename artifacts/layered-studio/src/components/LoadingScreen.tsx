@@ -119,10 +119,11 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         {/* ===== BRAND NAME: letter-by-letter reveal ===== */}
         <div className="relative overflow-hidden">
           <h1
-            className="text-[2.6rem] md:text-[3.4rem] font-light tracking-[0.02em] text-white"
+            className="text-[2.6rem] md:text-[3.4rem] text-white"
             style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 300,
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
               filter: phase >= 5
                 ? "drop-shadow(0 0 30px rgba(255,255,255,0.2))"
                 : "none",
