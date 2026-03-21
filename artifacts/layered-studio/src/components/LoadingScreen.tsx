@@ -1,58 +1,73 @@
 import { useState, useEffect } from "react";
 
+/**
+ * The Layered Studio logo is 4 stacked rounded rectangles,
+ * cascading from dark-gray (bottom) to white (top).
+ * Each card is offset slightly up-right, creating the "layered" effect.
+ */
+
+const layers = [
+  { color: "rgba(255,255,255,0.15)", x: 0, y: 0, delay: 400 },
+  { color: "rgba(255,255,255,0.30)", x: 4, y: -8, delay: 600 },
+  { color: "rgba(255,255,255,0.55)", x: 8, y: -16, delay: 800 },
+  { color: "rgba(255,255,255,0.95)", x: 12, y: -24, delay: 1000 },
+];
+
 export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState(0);
-  // phase 0 = fade in + grid lines appear
-  // phase 1 = logo scales in
-  // phase 2 = brand name writes on
-  // phase 3 = subtitle fades in
-  // phase 4 = glow pulse
-  // phase 5 = fade out
+  // 0 = black screen
+  // 1 = grid appears + layers start stacking
+  // 2 = layers fully stacked, glow pulse
+  // 3 = brand name writes letter-by-letter
+  // 4 = subtitle fades in
+  // 5 = everything glows
+  // 6 = fade out
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 400),
-      setTimeout(() => setPhase(2), 1000),
-      setTimeout(() => setPhase(3), 2600),
-      setTimeout(() => setPhase(4), 3200),
-      setTimeout(() => setPhase(5), 4200),
-      setTimeout(() => onComplete(), 5000),
+      setTimeout(() => setPhase(1), 300),
+      setTimeout(() => setPhase(2), 1500),
+      setTimeout(() => setPhase(3), 2000),
+      setTimeout(() => setPhase(4), 3800),
+      setTimeout(() => setPhase(5), 4400),
+      setTimeout(() => setPhase(6), 5200),
+      setTimeout(() => onComplete(), 6000),
     ];
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#050505] transition-opacity duration-700 ${
-        phase >= 5 ? "opacity-0 pointer-events-none" : "opacity-100"
+      className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#050505] transition-opacity duration-800 ${
+        phase >= 6 ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
       style={{ cursor: "default" }}
     >
-      {/* Subtle grid lines */}
+      {/* Subtle background grid */}
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ${
           phase >= 1 ? "opacity-100" : "opacity-0"
         }`}
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
         }}
       />
 
       {/* Horizontal guide lines */}
       <div className="absolute inset-0 flex flex-col justify-center pointer-events-none">
-        {[-60, 0, 60].map((offset) => (
+        {[-80, 0, 80].map((offset) => (
           <div
             key={offset}
-            className={`h-px mx-auto transition-all duration-1000 ease-out ${
-              phase >= 1 ? "w-[300px] opacity-100" : "w-0 opacity-0"
+            className={`h-px mx-auto transition-all ease-out ${
+              phase >= 1 ? "w-[280px] opacity-100" : "w-0 opacity-0"
             }`}
             style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)",
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)",
               transform: `translateY(${offset}px)`,
-              transitionDelay: `${Math.abs(offset) * 3}ms`,
+              transitionDuration: "1200ms",
+              transitionDelay: `${200 + Math.abs(offset) * 2}ms`,
             }}
           />
         ))}
@@ -60,56 +75,69 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
       {/* Center content */}
       <div className="relative z-10 flex flex-col items-center">
-        {/* Logo */}
+
+        {/* ===== ANIMATED LOGO: 4 stacked rounded rectangles ===== */}
         <div
-          className={`mb-8 transition-all duration-700 ease-out ${
-            phase >= 1
-              ? "opacity-100 scale-100 translate-y-0"
-              : "opacity-0 scale-75 translate-y-4"
-          }`}
+          className="relative mb-10"
+          style={{
+            width: "72px",
+            height: "72px",
+            filter: phase >= 5
+              ? "drop-shadow(0 0 25px rgba(255,255,255,0.3))"
+              : "none",
+            transition: "filter 1s ease",
+          }}
         >
-          <img
-            src="/favicon.png"
-            alt="Layered Studio"
-            className="w-14 h-14 object-contain"
-            style={{
-              filter:
-                phase >= 4
-                  ? "drop-shadow(0 0 20px rgba(255,255,255,0.3))"
+          {layers.map((layer, i) => (
+            <div
+              key={i}
+              className="absolute transition-all ease-out"
+              style={{
+                width: "42px",
+                height: "28px",
+                borderRadius: "7px",
+                backgroundColor: layer.color,
+                bottom: `${12 + i * 2}px`,
+                left: `${6 + layer.x}px`,
+                transform: phase >= 1
+                  ? `translateY(${layer.y}px) scale(1)`
+                  : `translateY(40px) scale(0.7)`,
+                opacity: phase >= 1 ? 1 : 0,
+                transitionDuration: "700ms",
+                transitionDelay: `${layer.delay}ms`,
+                transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+                boxShadow: phase >= 5 && i === 3
+                  ? "0 0 20px rgba(255,255,255,0.15)"
                   : "none",
-              transition: "filter 0.8s ease",
-            }}
-          />
+              }}
+            />
+          ))}
         </div>
 
-        {/* Brand name with handwritten reveal */}
+        {/* ===== BRAND NAME: letter-by-letter reveal ===== */}
         <div className="relative overflow-hidden">
           <h1
-            className="text-[2.8rem] md:text-[3.8rem] font-light tracking-[0.02em] text-white"
+            className="text-[2.6rem] md:text-[3.4rem] font-light tracking-[0.02em] text-white"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontStyle: "normal",
               fontWeight: 300,
-              filter:
-                phase >= 4
-                  ? "drop-shadow(0 0 30px rgba(255,255,255,0.25))"
-                  : "none",
+              filter: phase >= 5
+                ? "drop-shadow(0 0 30px rgba(255,255,255,0.2))"
+                : "none",
               transition: "filter 0.8s ease",
             }}
           >
-            {/* Each letter animates in sequence */}
             {"Layered Studio".split("").map((char, i) => (
               <span
                 key={i}
-                className="inline-block transition-all ease-out"
+                className="inline-block"
                 style={{
-                  opacity: phase >= 2 ? 1 : 0,
-                  transform:
-                    phase >= 2
-                      ? "translateY(0) scaleY(1)"
-                      : "translateY(20px) scaleY(0.8)",
-                  transitionDuration: "500ms",
-                  transitionDelay: `${i * 80}ms`,
+                  opacity: phase >= 3 ? 1 : 0,
+                  transform: phase >= 3
+                    ? "translateY(0) rotateX(0deg)"
+                    : "translateY(25px) rotateX(-40deg)",
+                  transition: "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                  transitionDelay: `${i * 70}ms`,
                 }}
               >
                 {char === " " ? "\u00A0" : char}
@@ -117,75 +145,68 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
             ))}
           </h1>
 
-          {/* Pen cursor / writing indicator */}
+          {/* Glowing pen cursor that sweeps across */}
           <div
-            className="absolute top-1/2 h-[60%] w-[2px] -translate-y-1/2 rounded-full"
+            className="absolute top-1/2 h-[55%] w-[2px] -translate-y-1/2 rounded-full pointer-events-none"
             style={{
-              background:
-                "linear-gradient(180deg, transparent, rgba(255,255,255,0.8), transparent)",
-              boxShadow: "0 0 12px rgba(255,255,255,0.4)",
-              opacity: phase === 2 ? 1 : 0,
-              transition: "left 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease",
-              left: phase >= 2 ? "100%" : "0%",
+              background: "linear-gradient(180deg, transparent, rgba(255,255,255,0.9), transparent)",
+              boxShadow: "0 0 14px rgba(255,255,255,0.5), 0 0 4px rgba(255,255,255,0.8)",
+              opacity: phase === 3 ? 1 : 0,
+              left: phase >= 3 ? "102%" : "-2%",
+              transition: "left 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease",
             }}
           />
         </div>
 
-        {/* Thin decorative line under title */}
+        {/* Thin decorative divider */}
         <div
-          className={`mt-4 h-px transition-all duration-700 ease-out ${
-            phase >= 3 ? "w-24 opacity-100" : "w-0 opacity-0"
+          className={`mt-5 h-px transition-all ease-out ${
+            phase >= 4 ? "w-20 opacity-100" : "w-0 opacity-0"
           }`}
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)",
+            transitionDuration: "700ms",
           }}
         />
 
-        {/* Subtitle */}
+        {/* DIGITAL STUDIO subtitle */}
         <p
-          className={`mt-5 text-[11px] tracking-[0.35em] uppercase text-white/40 transition-all duration-700 ease-out ${
-            phase >= 3
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-3"
-          }`}
+          className="mt-5 text-[10px] tracking-[0.4em] uppercase text-white/35"
           style={{
             fontFamily: "'Inter', sans-serif",
             fontWeight: 400,
+            opacity: phase >= 4 ? 1 : 0,
+            transform: phase >= 4 ? "translateY(0)" : "translateY(8px)",
+            transition: "all 0.7s ease",
+            transitionDelay: "200ms",
           }}
         >
           Digital Studio
         </p>
       </div>
 
-      {/* Subtle radial vignette */}
+      {/* Radial vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse 60% 60% at 50% 50%, transparent 40%, rgba(0,0,0,0.6))",
+          background: "radial-gradient(ellipse 55% 55% at 50% 50%, transparent 30%, rgba(0,0,0,0.7))",
         }}
       />
 
-      {/* Bottom loading progress bar */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
-        <div className="w-32 h-px bg-white/10 rounded-full overflow-hidden">
+      {/* Bottom progress bar */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+        <div className="w-28 h-px bg-white/8 rounded-full overflow-hidden">
           <div
-            className="h-full bg-white/30 rounded-full transition-all ease-out"
+            className="h-full bg-white/25 rounded-full"
             style={{
               width:
-                phase === 0
-                  ? "0%"
-                  : phase === 1
-                  ? "15%"
-                  : phase === 2
-                  ? "50%"
-                  : phase === 3
-                  ? "75%"
-                  : phase === 4
-                  ? "100%"
-                  : "100%",
-              transitionDuration: phase === 2 ? "1600ms" : "600ms",
+                phase <= 0 ? "0%" :
+                phase === 1 ? "20%" :
+                phase === 2 ? "35%" :
+                phase === 3 ? "60%" :
+                phase === 4 ? "80%" :
+                "100%",
+              transition: `width ${phase === 3 ? "1800ms" : "600ms"} ease-out`,
             }}
           />
         </div>
