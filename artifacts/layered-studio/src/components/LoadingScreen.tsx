@@ -38,10 +38,12 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
 
   return (
     <div
-      className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#050505] transition-opacity duration-800 ${
-        phase >= 6 ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
-      style={{ cursor: "default" }}
+      className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#050505]"
+      style={{
+        cursor: "default",
+        transform: phase >= 6 ? "translateY(-100%)" : "translateY(0)",
+        transition: "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1)",
+      }}
     >
       {/* Subtle background grid */}
       <div

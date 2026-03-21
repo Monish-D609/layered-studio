@@ -43,9 +43,13 @@ function App() {
     <>
       {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
       <div
-        className={`min-h-screen bg-[#080808] transition-opacity duration-500 ${
-          loading ? "opacity-0" : "opacity-100"
-        }`}
+        className="min-h-screen bg-[#080808]"
+        style={{
+          opacity: loading ? 0 : 1,
+          transform: loading ? "translateY(-50px)" : "translateY(0)",
+          transition: "opacity 0.6s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+          transitionDelay: loading ? "0ms" : "200ms",
+        }}
       >
         <CustomCursor />
         <Navbar />
