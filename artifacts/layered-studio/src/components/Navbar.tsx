@@ -60,7 +60,7 @@ export default function Navbar() {
           transition-all duration-500 ease-out
           ${scrolled
             ? "bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/[0.08] shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_8px_40px_rgba(0,0,0,0.6)]"
-            : "bg-transparent border border-transparent"
+            : "bg-white/[0.03] backdrop-blur-md border border-white/[0.06]"
           }
         `}
         style={scrolled ? {

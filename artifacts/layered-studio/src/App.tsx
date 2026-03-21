@@ -16,19 +16,16 @@ function StaggeredSection({
   show,
   delay,
   children,
-  noTransform = false,
 }: {
   show: boolean;
   delay: number;
   children: React.ReactNode;
-  noTransform?: boolean;
 }) {
   return (
     <div
       style={{
         opacity: show ? 1 : 0,
-        transform: noTransform ? "none" : (show ? "translateY(0)" : "translateY(30px)"),
-        transition: "opacity 0.6s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
+        transition: "opacity 1s ease",
         transitionDelay: show ? `${delay}ms` : "0ms",
       }}
     >
@@ -72,7 +69,7 @@ function App() {
       <CustomCursor />
       {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
       <div className="min-h-screen bg-[#080808]">
-        <StaggeredSection show={show} delay={100} noTransform={true}>
+        <StaggeredSection show={show} delay={100}>
           <Navbar />
         </StaggeredSection>
         <main>

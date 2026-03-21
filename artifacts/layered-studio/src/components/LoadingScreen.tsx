@@ -56,15 +56,23 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
           {[1, 2, 3, 4].map((line, i) => (
             <div
               key={line}
-              className="w-full h-px"
+              className="w-full h-px scanner-line-wrapper"
               style={{
-                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 50%, transparent)",
                 transform: phase >= 1 ? "scaleX(1)" : "scaleX(0)",
                 transformOrigin: "center",
                 transition: "transform 1.5s cubic-bezier(0.22, 1, 0.36, 1)",
                 transitionDelay: `${300 + i * 150}ms`,
               }}
-            />
+            >
+              <div 
+                className="scanner-line-glow" 
+                style={{ 
+                  animationDelay: `${i * 0.5}s`,
+                  opacity: phase >= 2 ? 1 : 0,
+                  transition: "opacity 1s ease 1s"
+                }} 
+              />
+            </div>
           ))}
         </div>
 

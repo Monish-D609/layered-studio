@@ -116,6 +116,35 @@
   background-size: 60px 60px;
 }
 
+/* Premium Scanner Line */
+@keyframes scan-line {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.scanner-line-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03); /* Faint base line */
+}
+
+.scanner-line-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255,255,255,0.1) 30%, 
+    rgba(230,215,168,0.8) 50%, 
+    rgba(255,255,255,0.1) 70%, 
+    transparent 100%
+  );
+  animation: scan-line 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  box-shadow: 0 0 8px rgba(230,215,168,0.4);
+}
+
 /* Glow effect */
 .hero-glow {
   background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,255,255,0.06), transparent);
