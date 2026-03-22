@@ -58,9 +58,10 @@ export default function Navbar() {
           flex items-center justify-between
           px-4 h-14 rounded-2xl
           transition-all duration-500 ease-out
+          border border-white/[0.15] shadow-[0_0_30px_rgba(255,255,255,0.08)]
           ${scrolled
-            ? "bg-[#080808]/40 backdrop-blur-2xl border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.8)]"
-            : "bg-white/[0.02] backdrop-blur-xl border border-white/[0.06]"
+            ? "bg-[#080808]/40 backdrop-blur-2xl"
+            : "bg-white/[0.03] backdrop-blur-xl"
           }
         `}
       >
