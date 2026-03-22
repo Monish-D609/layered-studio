@@ -158,7 +158,7 @@ export default function WorkSection() {
                 data-cursor-hover
               >
                 {/* Numbering Section (Top) */}
-                <div className="flex-1 bg-[#2a2a2a] relative flex items-center justify-center transition-colors duration-500">
+                <div className="flex-1 bg-[#1F1F1F] relative flex items-center justify-center transition-colors duration-500">
                   <span className="text-white/10 text-[100px] md:text-[140px] font-black tracking-tighter">
                     {proj.number}
                   </span>
