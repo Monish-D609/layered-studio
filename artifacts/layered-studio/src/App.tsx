@@ -39,8 +39,13 @@ function StaggeredSection({
 function App() {
   const [loading, setLoading] = useState(true);
 
-  // Initialize Lenis for buttery smooth scrolling
+  const show = !loading;
+
+  // Initialize Lenis for buttery smooth scrolling only AFTER loading
+  // This prevents Lenis from calculating the scroll height as 0 while the loading screen is locking body overflow.
   useEffect(() => {
+    if (loading) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -59,13 +64,11 @@ function App() {
     requestAnimationFrame(raf);
 
     return () => lenis.destroy();
-  }, []);
+  }, [loading]);
 
   const handleLoadingComplete = useCallback(() => {
     setLoading(false);
   }, []);
-
-  const show = !loading;
 
   // Reveal on scroll for sections
   useEffect(() => {

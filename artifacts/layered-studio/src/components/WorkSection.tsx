@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const projects = [
   {
@@ -41,110 +41,83 @@ const projects = [
 ];
 
 export default function WorkSection() {
-  const [currentIndex, setCurrentIndex] = useState(3); // Start at 04 as in screenshot
+  const targetRef = useRef<HTMLDivElement>(null);
+  
+  // Track vertical scroll progress strictly within this 400vh section
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
+
+  // Map vertical scroll (0 to 1) to horizontal translation (0% to -75%)
+  // -75% ensures the last card of the 6 stops beautifully within the viewport
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
 
   return (
-    <section id="work" className="py-32 overflow-hidden bg-[#080808]">
-      <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
-        <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#6E8898] mb-4">
-          PORTFOLIO
+    <section 
+      id="work" 
+      ref={targetRef} 
+      className="relative h-[400vh] bg-[#080808]"
+    >
+      {/* Sticky container that locks to the viewport during the 400vh scroll */}
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+        
+        {/* Absolute Title Layer */}
+        <div className="absolute top-[15%] md:top-[20%] left-0 w-full px-8 md:px-16 pointer-events-none z-10">
+          <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#6E8898] mb-4">
+            PORTFOLIO
+          </div>
+          <h2 className="text-6xl md:text-8xl font-black text-white tracking-tight drop-shadow-2xl">
+            Selected Work
+          </h2>
         </div>
-        <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
-          Selected Work
-        </h2>
-      </div>
 
-      {/* 3D Coverflow Carousel */}
-      <div className="relative h-[450px] w-full max-w-[1400px] mx-auto flex items-center justify-center">
-        <AnimatePresence initial={false}>
-          {projects.map((proj, index) => {
-            const offset = index - currentIndex;
-            const isCenter = offset === 0;
-
-            // Calculate styles based on offset
-            const xOffset = offset * 260; // Spread cards horizontally
-            const scale = isCenter ? 1 : 0.85 - Math.abs(offset) * 0.05;
-            const zIndex = 50 - Math.abs(offset);
-            const opacity = isCenter ? 1 : Math.max(0, 0.4 - Math.abs(offset) * 0.1);
-
+        {/* The horizontally moving track */}
+        <motion.div style={{ x }} className="flex gap-8 px-8 md:px-16 mt-20 items-end">
+          {projects.map((proj, idx) => {
+            // Slight vertical stagger for aesthetic rhythm
+            const isOdd = idx % 2 === 1;
+            
             return (
-              <motion.div
+              <div
                 key={proj.number}
-                className={`absolute w-[360px] md:w-[420px] h-[320px] md:h-[380px] rounded-2xl bg-[#0f0f0f] border border-white/[0.04] overflow-hidden flex flex-col justify-end p-8 ${
-                  !isCenter ? "cursor-pointer" : ""
-                }`}
-                style={{ zIndex }}
-                initial={{ opacity: 0, x: xOffset + Math.sign(offset) * 50, scale: 0.8 }}
-                animate={{
-                  opacity,
-                  x: xOffset,
-                  scale,
-                }}
-                transition={{
-                  duration: 0.6,
-                  ease: [0.32, 0.72, 0, 1],
-                }}
-                onClick={() => {
-                  if (!isCenter) setCurrentIndex(index);
-                }}
+                className={`group relative flex-shrink-0 w-[85vw] md:w-[460px] h-[500px] rounded-3xl bg-[#0f0f0f] border border-white/[0.04] overflow-hidden flex flex-col justify-end p-10 transition-colors hover:border-white/[0.12] ${isOdd ? 'md:-translate-y-12' : ''}`}
                 data-cursor-hover
               >
                 {/* Giant faint background number */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-white/[0.04] text-7xl md:text-8xl font-black tracking-tighter">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-transform duration-700 group-hover:scale-110">
+                  <span className="text-white/[0.02] group-hover:text-white/[0.04] transition-colors duration-500 text-[180px] md:text-[240px] font-black tracking-tighter">
                     {proj.number}
                   </span>
                 </div>
 
                 {/* Content */}
-                <motion.div 
-                  className="relative z-10"
-                  animate={{ opacity: isCenter ? 1 : 0.3 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <div className="text-white/40 text-[10px] md:text-xs font-mono font-semibold tracking-widest mb-2 uppercase">
+                <div className="relative z-10 transform transition-transform duration-500 group-hover:translate-y-[-8px]">
+                  <div className="text-white/40 text-[11px] font-mono font-semibold tracking-widest mb-3 uppercase">
                     {proj.type}
                   </div>
-                  <h3 className="text-white text-xl md:text-2xl font-bold mb-2">
+                  <h3 className="text-white text-3xl font-bold mb-3">
                     {proj.name}
                   </h3>
-                  <p className="text-white/50 text-xs md:text-sm leading-relaxed max-w-[280px]">
+                  <p className="text-white/50 text-sm leading-relaxed max-w-[320px]">
                     {proj.desc}
                   </p>
-                </motion.div>
+                </div>
 
-                {/* Subtle gradient overlay when not centered to simulate shadow */}
-                {!isCenter && (
-                  <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-                )}
-              </motion.div>
+                {/* Hover overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </div>
             );
           })}
-        </AnimatePresence>
-      </div>
-
-      {/* Pagination & Instructions */}
-      <div className="mt-12 flex flex-col items-center gap-4">
-        {/* Dots */}
-        <div className="flex items-center gap-2">
-          {projects.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className={`transition-all duration-300 rounded-full ${
-                currentIndex === idx
-                  ? "w-8 h-1.5 bg-white"
-                  : "w-1.5 h-1.5 bg-white/20 hover:bg-white/40"
-              }`}
-              aria-label={`Go to project ${idx + 1}`}
-            />
-          ))}
+        </motion.div>
+        
+        {/* Scroll Progress Indicator Bar */}
+        <div className="absolute bottom-10 left-8 md:left-16 w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+          <motion.div 
+            className="h-full bg-white rounded-full origin-left"
+            style={{ scaleX: scrollYProgress }}
+          />
         </div>
         
-        {/* Helper Text */}
-        <div className="text-white/40 text-[11px] md:text-xs font-medium tracking-wide">
-          Drag or click to explore projects
-        </div>
       </div>
     </section>
   );
