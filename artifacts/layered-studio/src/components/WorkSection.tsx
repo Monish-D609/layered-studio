@@ -76,10 +76,10 @@ export default function WorkSection() {
             const scale = isCenter ? 1 : Math.max(0.6, 0.9 - absOffset * 0.15);
             const zIndex = 50 - absOffset;
             
-            // Progressive Fading/Dilution: 100% -> 50% -> 15% -> 0%
+            // Progressive Fading/Dilution: Keep appealing but slightly receded
             let opacity = 1;
-            if (absOffset === 1) opacity = 0.5;
-            if (absOffset === 2) opacity = 0.15;
+            if (absOffset === 1) opacity = 0.95;
+            if (absOffset === 2) opacity = 0.7;
             if (absOffset >= 3) opacity = 0; // Hide anything further than 2 cards away
 
             return (
@@ -133,11 +133,11 @@ export default function WorkSection() {
                   </p>
                 </motion.div>
 
-                {/* Progressive Darken overlay for side cards to structurally fade them */}
+                {/* Less aggressive darken overlay for side cards so they stay vibrant */}
                 {!isCenter && (
                   <div 
                     className="absolute inset-0 pointer-events-none" 
-                    style={{ background: `rgba(0,0,0, ${0.4 + absOffset * 0.1})` }}
+                    style={{ background: `rgba(0,0,0, ${0.2 + absOffset * 0.1})` }}
                   />
                 )}
               </motion.div>
