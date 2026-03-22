@@ -15,17 +15,22 @@ import Footer from "@/components/Footer";
 function StaggeredSection({
   show,
   delay,
+  direction = "up",
   children,
 }: {
   show: boolean;
   delay: number;
+  direction?: "up" | "down";
   children: React.ReactNode;
 }) {
+  const yOffset = direction === "up" ? 40 : -40;
+
   return (
     <div
       style={{
         opacity: show ? 1 : 0,
-        transition: "opacity 1s ease",
+        transform: show ? "none" : `translateY(${yOffset}px)`,
+        transition: "opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)",
         transitionDelay: show ? `${delay}ms` : "0ms",
       }}
     >
@@ -77,7 +82,7 @@ function App() {
         />
       )}
       <div className="min-h-screen bg-[#080808]">
-        <StaggeredSection show={contentReady} delay={0}>
+        <StaggeredSection show={contentReady} delay={0} direction="down">
           <Navbar />
         </StaggeredSection>
         <main>
