@@ -50,11 +50,12 @@ export default function Logo({ size = 32, showText = true, className = "" }: Log
           style={{
             fontFamily: '"Outfit", sans-serif',
             fontWeight: 800,
-            fontSize: "15px",
+            fontSize: "18px",
             letterSpacing: "-0.04em",
             color: "white",
             lineHeight: 1,
             textTransform: "lowercase",
+            textShadow: "0 4px 20px rgba(255,255,255,0.4)",
           }}
         >
           layered studio
