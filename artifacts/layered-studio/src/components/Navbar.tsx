@@ -98,6 +98,7 @@ export default function Navbar() {
               onClick={() => scrollTo(link.href)}
               onMouseEnter={() => setHoveredIdx(i)}
               className="relative z-10 text-[13px] text-white/80 hover:text-white transition-colors duration-150 px-4 py-2 rounded-lg font-normal tracking-wide"
+              style={{ fontFamily: "'Outfit', sans-serif" }}
             >
               {link.label}
             </button>
