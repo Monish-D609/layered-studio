@@ -112,7 +112,7 @@ export default function WorkSection() {
               <motion.div
                 key={proj.number}
                 /* Dimensions massively reduced for premium frame ratio sizing */
-                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-2xl bg-[#0f0f0f] border border-white/[0.04] overflow-hidden flex flex-col justify-end p-8 ${
+                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-2xl bg-[#0f0f0f] border-2 overflow-hidden flex flex-col justify-end p-8 ${
                   !isCenter ? "" : ""
                 }`}
                 style={{ 
@@ -120,12 +120,19 @@ export default function WorkSection() {
                   boxShadow: isCenter ? "0 30px 60px rgba(0,0,0,0.6)" : "0 10px 30px rgba(0,0,0,0.9)",
                 }}
                 // We add an extra spacing bump for adjacent cards mathematically
-                initial={{ opacity: 0, x: xOffset + Math.sign(offset) * 60, scale: 0.8, rotateY }}
+                initial={{ 
+                  opacity: 0, 
+                  x: xOffset + Math.sign(offset) * 60, 
+                  scale: 0.8, 
+                  rotateY,
+                  borderColor: "rgba(255, 255, 255, 0.05)" 
+                }}
                 animate={{
                   opacity,
                   x: xOffset,
                   scale,
                   rotateY,
+                  borderColor: isCenter ? "rgba(255, 255, 255, 0.25)" : "rgba(255, 255, 255, 0.08)",
                 }}
                 transition={{
                   duration: 0.6,
@@ -159,7 +166,6 @@ export default function WorkSection() {
                     {proj.desc}
                   </p>
                 </motion.div>
-
               </motion.div>
             );
           })}
