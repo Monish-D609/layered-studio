@@ -35,17 +35,20 @@ function StaggeredSection({
 }
 
 function App() {
-  const [loading, setLoading] = useState(true);
-
-  const show = !loading;
+  const [loadingScreenMounted, setLoadingScreenMounted] = useState(true);
+  const [contentReady, setContentReady] = useState(false);
 
   const handleLoadingComplete = useCallback(() => {
-    setLoading(false);
+    setLoadingScreenMounted(false);
   }, []);
 
-  // Reveal on scroll for sections
+  const handleReveal = useCallback(() => {
+    setContentReady(true);
+  }, []);
+
+  // Reveal on scroll for inner elements that manually trigger .reveal class
   useEffect(() => {
-    if (loading) return;
+    if (!contentReady) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -62,40 +65,45 @@ function App() {
     });
 
     return () => observer.disconnect();
-  }, [loading]);
+  }, [contentReady]);
 
   return (
     <>
       <CustomCursor />
-      {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
+      {loadingScreenMounted && (
+        <LoadingScreen 
+          onComplete={handleLoadingComplete} 
+          onReveal={handleReveal} 
+        />
+      )}
       <div className="min-h-screen bg-[#080808]">
-        <StaggeredSection show={show} delay={100}>
+        <StaggeredSection show={contentReady} delay={0}>
           <Navbar />
         </StaggeredSection>
         <main>
-          <StaggeredSection show={show} delay={200}>
+          <StaggeredSection show={contentReady} delay={100}>
             <HeroSection />
           </StaggeredSection>
-          <StaggeredSection show={show} delay={400}>
+          <StaggeredSection show={contentReady} delay={200}>
             <CapabilitiesSection />
           </StaggeredSection>
-          <StaggeredSection show={show} delay={520}>
+          <StaggeredSection show={contentReady} delay={300}>
             <ProcessSection />
           </StaggeredSection>
-          <StaggeredSection show={show} delay={640}>
+          <StaggeredSection show={contentReady} delay={400}>
             <WorkSection />
           </StaggeredSection>
-          <StaggeredSection show={show} delay={760}>
+          <StaggeredSection show={contentReady} delay={500}>
             <PricingSection />
           </StaggeredSection>
-          <StaggeredSection show={show} delay={880}>
+          <StaggeredSection show={contentReady} delay={600}>
             <TestimonialsSection />
           </StaggeredSection>
-          <StaggeredSection show={show} delay={1000}>
+          <StaggeredSection show={contentReady} delay={700}>
             <ContactSection />
           </StaggeredSection>
         </main>
-        <StaggeredSection show={show} delay={1120}>
+        <StaggeredSection show={contentReady} delay={800}>
           <Footer />
         </StaggeredSection>
       </div>

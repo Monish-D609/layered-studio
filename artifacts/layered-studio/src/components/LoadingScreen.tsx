@@ -13,7 +13,7 @@ const layers = [
   { color: "rgba(255,255,255,0.95)", x: 12, y: -24, delay: 1000 },
 ];
 
-export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
+export default function LoadingScreen({ onComplete, onReveal }: { onComplete: () => void, onReveal?: () => void }) {
   const [phase, setPhase] = useState(0);
   // 0 = black screen
   // 1 = grid appears + layers start stacking
@@ -30,8 +30,9 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       setTimeout(() => setPhase(3), 2000),
       setTimeout(() => setPhase(4), 3800),
       setTimeout(() => setPhase(5), 4400),
+      setTimeout(() => onReveal?.(), 4600), // Pre-mount app content underneath so it avoids the black screen lag
       setTimeout(() => setPhase(6), 5200),
-      setTimeout(() => onComplete(), 6000),
+      setTimeout(() => onComplete(), 6200), // Safely unmount after animation completes
     ];
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
