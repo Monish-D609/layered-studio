@@ -145,7 +145,7 @@ export default function WorkSection() {
               >
                 {/* Giant faint background number */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-white/[0.04] text-[100px] md:text-[140px] font-black tracking-tighter">
+                  <span className="text-[#6E8898]/10 text-[100px] md:text-[140px] font-black tracking-tighter">
                     {proj.number}
                   </span>
                 </div>
