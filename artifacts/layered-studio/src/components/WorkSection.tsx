@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
 
 const projects = [
   {
@@ -43,9 +43,26 @@ const projects = [
 export default function WorkSection() {
   const [currentIndex, setCurrentIndex] = useState(4); // Start at 05 as in screenshot
 
+  // 1:1 Drag Gesture Handler
+  const handleDragEnd = (event: any, info: PanInfo) => {
+    // Determine the user's swipe intent computationally
+    const threshold = 50; 
+    const swipeVelocity = 300;
+
+    if (info.offset.x < -threshold || info.velocity.x < -swipeVelocity) {
+      // Swipe Left -> Next Card
+      setCurrentIndex((prev) => Math.min(prev + 1, projects.length - 1));
+    } else if (info.offset.x > threshold || info.velocity.x > swipeVelocity) {
+      // Swipe Right -> Prev Card
+      setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    }
+    // Note: Framer Motion automatically springs the container back to x:0 
+    // because dragConstraints are strictly { left:0, right:0 }. This snaps the cards elegantly!
+  };
+
   return (
-    <section id="work" className="py-32 overflow-hidden bg-[#080808]">
-      <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
+    <section id="work" className="py-24 overflow-hidden bg-[#080808]">
+      <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
         <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#6E8898] mb-4">
           PORTFOLIO
         </div>
@@ -54,10 +71,18 @@ export default function WorkSection() {
         </h2>
       </div>
 
-      {/* Lotus 3D Coverflow Carousel - Perspective is key for rotateY */}
-      <div 
-        className="relative h-[450px] md:h-[550px] w-full mx-auto flex items-center justify-center overflow-hidden"
+      {/* 
+        Interactive 3D Perspective Drag Container
+        Moves 1:1 with the mouse, then securely snaps back to index center geometry 
+      */}
+      <motion.div 
+        className="relative h-[380px] md:h-[480px] w-full mx-auto flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing"
         style={{ perspective: "1500px" }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.2} // Fluidity beyond constraint center
+        onDragEnd={handleDragEnd}
+        dragTransition={{ bounceStiffness: 400, bounceDamping: 25 }} // Luxury spring physics on release
       >
         <AnimatePresence initial={false}>
           {projects.map((proj, index) => {
@@ -68,15 +93,15 @@ export default function WorkSection() {
             // Lotus Architecture (Looking inward):
             const rotateY = isCenter ? 0 : offset > 0 ? -25 : 25;
             
-            // Progressive Spacing: Ensure at least 2 cards fit clearly on each side before clipping.
-            // On desktop: center(0) -> side(320) -> far-side(640) 
-            const xOffset = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 220 : 340);
+            // Scaled Geometry: Shrink the actual cards heavily to balance frame ratio
+            const baseSpread = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 250;
+            const xOffset = offset * baseSpread;
             
-            // Progressive Scaling & Depth
+            // Progressive Scaling & Depth (Cards are visually smaller around the center)
             const scale = isCenter ? 1 : Math.max(0.6, 0.9 - absOffset * 0.15);
             const zIndex = 50 - absOffset;
             
-            // Progressive Fading/Dilution: Keep appealing but slightly receded
+            // Progressive Fading/Dilution: Keep appealing but cleanly receding
             let opacity = 1;
             if (absOffset === 1) opacity = 0.95;
             if (absOffset === 2) opacity = 0.7;
@@ -85,15 +110,16 @@ export default function WorkSection() {
             return (
               <motion.div
                 key={proj.number}
-                className={`absolute w-[340px] md:w-[460px] h-[400px] md:h-[500px] rounded-2xl bg-[#0f0f0f] border border-white/[0.04] overflow-hidden flex flex-col justify-end p-8 md:p-10 ${
-                  !isCenter ? "cursor-pointer" : ""
+                /* Dimensions massively reduced for premium frame ratio sizing */
+                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-2xl bg-[#0f0f0f] border border-white/[0.04] overflow-hidden flex flex-col justify-end p-8 ${
+                  !isCenter ? "" : ""
                 }`}
                 style={{ 
                   zIndex,
-                  // We simulate lighting by making the edge darker based on rotation
                   boxShadow: isCenter ? "0 30px 60px rgba(0,0,0,0.6)" : "0 10px 30px rgba(0,0,0,0.9)",
                 }}
-                initial={{ opacity: 0, x: xOffset + Math.sign(offset) * 100, scale: 0.8, rotateY }}
+                // We add an extra spacing bump for adjacent cards mathematically
+                initial={{ opacity: 0, x: xOffset + Math.sign(offset) * 60, scale: 0.8, rotateY }}
                 animate={{
                   opacity,
                   x: xOffset,
@@ -101,7 +127,7 @@ export default function WorkSection() {
                   rotateY,
                 }}
                 transition={{
-                  duration: 0.7,
+                  duration: 0.6,
                   ease: [0.32, 0.72, 0, 1], // Buttery smooth customized cubic bezier
                 }}
                 onClick={() => {
@@ -111,7 +137,7 @@ export default function WorkSection() {
               >
                 {/* Giant faint background number */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-white/[0.04] text-[120px] md:text-[180px] font-black tracking-tighter">
+                  <span className="text-white/[0.04] text-[100px] md:text-[140px] font-black tracking-tighter">
                     {proj.number}
                   </span>
                 </div>
@@ -122,13 +148,13 @@ export default function WorkSection() {
                   animate={{ opacity: isCenter ? 1 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="text-white/40 text-[10px] md:text-[11px] font-mono font-semibold tracking-widest mb-3 uppercase">
+                  <div className="text-white/40 text-[10px] font-mono font-semibold tracking-widest mb-2 uppercase">
                     {proj.type}
                   </div>
-                  <h3 className="text-white text-2xl md:text-3xl font-bold mb-3">
+                  <h3 className="text-white text-xl md:text-2xl font-bold mb-2 tracking-tight">
                     {proj.name}
                   </h3>
-                  <p className="text-white/50 text-xs md:text-sm leading-relaxed max-w-[300px]">
+                  <p className="text-white/50 text-xs md:text-sm leading-relaxed max-w-[280px]">
                     {proj.desc}
                   </p>
                 </motion.div>
@@ -144,10 +170,10 @@ export default function WorkSection() {
             );
           })}
         </AnimatePresence>
-      </div>
+      </motion.div>
 
       {/* Pagination Controls */}
-      <div className="mt-12 flex flex-col items-center gap-5">
+      <div className="mt-8 flex flex-col items-center gap-5">
         <div className="flex items-center gap-3">
           {projects.map((_, idx) => (
             <button
@@ -164,7 +190,7 @@ export default function WorkSection() {
         </div>
         
         <div className="text-white/30 text-[11px] font-medium tracking-widest uppercase">
-          Click cards to navigate
+          Drag or click cards to navigate
         </div>
       </div>
     </section>
