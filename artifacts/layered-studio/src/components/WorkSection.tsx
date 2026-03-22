@@ -126,7 +126,7 @@ export default function WorkSection() {
             return (
               <motion.div
                 key={proj.number}
-                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-[24px] bg-[#0f0f0f] border overflow-hidden flex flex-col justify-end p-8`}
+                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-[24px] border overflow-hidden flex flex-col`}
                 style={{ 
                   zIndex,
                 }}
@@ -147,8 +147,6 @@ export default function WorkSection() {
                   boxShadow: isCenter 
                     ? "0 30px 60px rgba(0,0,0,0.6), inset 0 2px 10px rgba(255,255,255,0.05)" 
                     : "0 15px 40px rgba(0,0,0,0.9), inset 0 0 40px rgba(255,255,255,0.05), inset 0 2px 4px rgba(255,255,255,0.1)", // Glossy side feel
-                  backgroundColor: isCenter ? "#0f0f0f" : "rgba(20,20,20,0.6)", // Glassy translucent sides
-                  backdropFilter: isCenter ? "none" : "blur(12px)",
                 }}
                 transition={{
                   duration: 0.6,
@@ -159,18 +157,17 @@ export default function WorkSection() {
                 }}
                 data-cursor-hover
               >
-                {/* Giant faint background number */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-[#6E8898]/10 text-[100px] md:text-[140px] font-black tracking-tighter">
+                {/* Numbering Section (Top) */}
+                <div className="flex-1 bg-[#2a2a2a] relative flex items-center justify-center transition-colors duration-500">
+                  <span className="text-white/10 text-[100px] md:text-[140px] font-black tracking-tighter">
                     {proj.number}
                   </span>
                 </div>
 
-                {/* Content */}
+                {/* Details Section (Bottom) */}
                 <motion.div 
-                  className="relative z-10"
-                  animate={{ opacity: isCenter ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
+                  className="bg-black p-6 md:p-8 flex flex-col justify-end relative z-10 transition-opacity duration-300"
+                  animate={{ opacity: isCenter ? 1 : 0.5 }}
                 >
                   <div className="text-white/40 text-[10px] font-mono font-semibold tracking-widest mb-2 uppercase">
                     {proj.type}
