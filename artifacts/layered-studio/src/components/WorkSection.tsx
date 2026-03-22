@@ -48,8 +48,8 @@ export default function WorkSection() {
     // The base distance representing one card hop
     const baseSpread = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 250;
     
-    // Calculate total "momentum" by combining pure physical cursor drag + ending velocity boost
-    const momentum = info.offset.x + (info.velocity.x * 0.15); 
+    // Calculate total "momentum" with a very subtle velocity assist, so it doesn't slingshot out of control
+    const momentum = info.offset.x + (info.velocity.x * 0.05); 
     
     // Determine how many indices to jump based on how fast and far the user dragged
     // Note: dragging left generates negative momentum, which should uniquely jump the index forward (+)
@@ -83,9 +83,8 @@ export default function WorkSection() {
         style={{ perspective: "1500px" }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.2} // Fluidity beyond constraint center
+        dragElastic={0.05} // Very stiff, prevents dragging too far physically so it doesn't snap back violently
         onDragEnd={handleDragEnd}
-        dragTransition={{ bounceStiffness: 400, bounceDamping: 25 }} // Luxury spring physics on release
       >
         <AnimatePresence initial={false}>
           {projects.map((proj, index) => {
