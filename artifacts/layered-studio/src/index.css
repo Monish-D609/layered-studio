@@ -56,6 +56,11 @@
     cursor: none !important;
   }
   
+  ::selection {
+    background-color: #10b981; /* Premium Emerald Green */
+    color: #ffffff;
+  }
+
   html {
     scroll-behavior: smooth;
   }
