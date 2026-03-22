@@ -45,19 +45,22 @@ export default function WorkSection() {
 
   // 1:1 Drag Gesture Handler
   const handleDragEnd = (event: any, info: PanInfo) => {
-    // Determine the user's swipe intent computationally
-    const threshold = 50; 
-    const swipeVelocity = 300;
-
-    if (info.offset.x < -threshold || info.velocity.x < -swipeVelocity) {
-      // Swipe Left -> Next Card
-      setCurrentIndex((prev) => Math.min(prev + 1, projects.length - 1));
-    } else if (info.offset.x > threshold || info.velocity.x > swipeVelocity) {
-      // Swipe Right -> Prev Card
-      setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    // The base distance representing one card hop
+    const baseSpread = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 250;
+    
+    // Calculate total "momentum" by combining pure physical cursor drag + ending velocity boost
+    const momentum = info.offset.x + (info.velocity.x * 0.15); 
+    
+    // Determine how many indices to jump based on how fast and far the user dragged
+    // Note: dragging left generates negative momentum, which should uniquely jump the index forward (+)
+    const indexChange = Math.round(momentum / -baseSpread);
+    
+    if (indexChange !== 0) {
+      setCurrentIndex((prev) => {
+        const next = prev + indexChange;
+        return Math.max(0, Math.min(next, projects.length - 1));
+      });
     }
-    // Note: Framer Motion automatically springs the container back to x:0 
-    // because dragConstraints are strictly { left:0, right:0 }. This snaps the cards elegantly!
   };
 
   return (
