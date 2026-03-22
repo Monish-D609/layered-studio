@@ -48,15 +48,16 @@ export default function Logo({ size = 32, showText = true, className = "" }: Log
       {showText && (
         <span
           style={{
-            fontFamily: "var(--app-font-display)",
-            fontWeight: 700,
-            fontSize: "14px",
-            letterSpacing: "-0.03em",
+            fontFamily: '"Outfit", sans-serif',
+            fontWeight: 800,
+            fontSize: "15px",
+            letterSpacing: "-0.04em",
             color: "white",
             lineHeight: 1,
+            textTransform: "lowercase",
           }}
         >
-          Layered Studio
+          layered studio
         </span>
       )}
     </div>
