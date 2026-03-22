@@ -58,7 +58,7 @@ function MagnetButton({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[12px] font-bold tracking-[0.15em] border ${
+      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[12px] font-medium tracking-[0.15em] border ${
         isPrimary
           ? "bg-white border-white"
           : "bg-transparent border-[#222]"
