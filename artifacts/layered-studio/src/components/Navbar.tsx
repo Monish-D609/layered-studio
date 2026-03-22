@@ -57,12 +57,13 @@ export default function Navbar() {
         className={`
           pointer-events-auto w-full max-w-4xl
           flex items-center justify-between
-          px-4 h-14 rounded-2xl
+          px-5 h-[60px] rounded-2xl
           transition-all duration-500 ease-out
-          border border-white/[0.15] shadow-[0_0_30px_rgba(255,255,255,0.08)]
+          border border-white/[0.15] 
+          shadow-[0_0_15px_rgba(255,255,255,0.4),0_0_3px_rgba(255,255,255,0.6),inset_0_2px_10px_rgba(255,255,255,0.2),inset_0_-2px_10px_rgba(0,0,0,0.4)]
           ${scrolled
-            ? "bg-[#080808]/40 backdrop-blur-2xl"
-            : "bg-white/[0.03] backdrop-blur-xl"
+            ? "bg-gradient-to-b from-white/[0.1] to-[#080808]/60 backdrop-blur-3xl"
+            : "bg-gradient-to-b from-white/[0.12] to-white/[0.02] backdrop-blur-2xl"
           }
         `}
       >
@@ -98,7 +99,7 @@ export default function Navbar() {
               }}
               onClick={() => scrollTo(link.href)}
               onMouseEnter={() => setHoveredIdx(i)}
-              className="relative z-10 text-[11px] text-white/70 hover:text-white transition-colors duration-150 px-4 py-2 rounded-lg font-semibold tracking-[0.15em] uppercase"
+              className="relative z-10 text-[11px] text-white/70 hover:text-white transition-colors duration-150 px-4 py-2 rounded-lg font-medium tracking-[0.2em] uppercase"
               style={{ fontFamily: "'Outfit', sans-serif" }}
             >
               {link.label}

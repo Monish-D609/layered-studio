@@ -97,46 +97,47 @@ export default function WorkSection() {
             const rotateY = isCenter ? 0 : offset > 0 ? -25 : 25;
             
             // Scaled Geometry: Shrink the actual cards heavily to balance frame ratio
-            const baseSpread = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 250;
+            const baseSpread = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 300;
             const xOffset = offset * baseSpread;
             
-            // Progressive Scaling & Depth (Cards are visually smaller around the center)
+            // Progressive Scaling & Depth
             const scale = isCenter ? 1 : Math.max(0.6, 0.9 - absOffset * 0.15);
             const zIndex = 50 - absOffset;
             
             // Eliminate the fade entirely to keep the outer cards extremely bold and prominent
             let opacity = 1;
-            if (absOffset > 10) opacity = 0; // Allow cards to run completely off the edges without artificially disappearing on wide screens
+            if (absOffset > 10) opacity = 0; // Allow cards to run completely off the edges
 
             return (
               <motion.div
                 key={proj.number}
-                /* Dimensions massively reduced for premium frame ratio sizing */
-                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-2xl bg-[#0f0f0f] border-2 overflow-hidden flex flex-col justify-end p-8 ${
-                  !isCenter ? "" : ""
-                }`}
+                className={`absolute w-[260px] md:w-[360px] h-[340px] md:h-[440px] rounded-[24px] bg-[#0f0f0f] border overflow-hidden flex flex-col justify-end p-8`}
                 style={{ 
                   zIndex,
-                  boxShadow: isCenter ? "0 30px 60px rgba(0,0,0,0.6)" : "0 10px 30px rgba(0,0,0,0.9)",
                 }}
-                // We add an extra spacing bump for adjacent cards mathematically
                 initial={{ 
                   opacity: 0, 
                   x: xOffset + Math.sign(offset) * 60, 
                   scale: 0.8, 
                   rotateY,
-                  borderColor: "rgba(255, 255, 255, 0.05)" 
+                  borderColor: "rgba(255, 255, 255, 0.05)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.9)"
                 }}
                 animate={{
                   opacity,
                   x: xOffset,
                   scale,
                   rotateY,
-                  borderColor: isCenter ? "rgba(255, 255, 255, 0.25)" : "rgba(255, 255, 255, 0.08)",
+                  borderColor: isCenter ? "rgba(255, 255, 255, 0.25)" : "rgba(255, 255, 255, 0.15)",
+                  boxShadow: isCenter 
+                    ? "0 30px 60px rgba(0,0,0,0.6), inset 0 2px 10px rgba(255,255,255,0.05)" 
+                    : "0 15px 40px rgba(0,0,0,0.9), inset 0 0 40px rgba(255,255,255,0.05), inset 0 2px 4px rgba(255,255,255,0.1)", // Glossy side feel
+                  backgroundColor: isCenter ? "#0f0f0f" : "rgba(20,20,20,0.6)", // Glassy translucent sides
+                  backdropFilter: isCenter ? "none" : "blur(12px)",
                 }}
                 transition={{
                   duration: 0.6,
-                  ease: [0.32, 0.72, 0, 1], // Buttery smooth customized cubic bezier
+                  ease: [0.32, 0.72, 0, 1],
                 }}
                 onClick={() => {
                   if (!isCenter) setCurrentIndex(index);
