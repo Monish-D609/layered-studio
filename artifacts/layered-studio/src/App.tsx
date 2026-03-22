@@ -11,6 +11,8 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
+import Lenis from "@studio-freight/lenis";
+
 /** Wrapper that staggers each child section's entrance after loading */
 function StaggeredSection({
   show,
@@ -36,6 +38,28 @@ function StaggeredSection({
 
 function App() {
   const [loading, setLoading] = useState(true);
+
+  // Initialize Lenis for buttery smooth scrolling
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
 
   const handleLoadingComplete = useCallback(() => {
     setLoading(false);

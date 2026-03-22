@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 function MagnetButton({
   children,
@@ -190,9 +191,36 @@ export default function HeroSection() {
         <span className="text-white/20 text-[10px] tracking-[0.25em]">SCROLL</span>
       </div>
 
-      {/* Ambient glows */}
-      <div className="absolute top-1/3 right-0 w-[600px] h-[600px] rounded-full bg-white/[0.015] blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/3 w-[300px] h-[300px] rounded-full bg-white/[0.02] blur-3xl pointer-events-none" />
+      {/* Premium Animated Aurora Mesh */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-screen opacity-50 z-0">
+        <motion.div
+          className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#1b253b] blur-[120px]"
+          animate={{
+            x: [0, -100, 50, 0],
+            y: [0, 100, -50, 0],
+            scale: [1, 1.1, 0.9, 1],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute bottom-[-10%] left-[5%] w-[600px] h-[600px] rounded-full bg-[#3c2a38] blur-[100px]"
+          animate={{
+            x: [0, 150, -50, 0],
+            y: [0, -100, 50, 0],
+            scale: [1, 1.2, 0.8, 1],
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute top-[40%] left-[30%] w-[500px] h-[500px] rounded-full bg-[#142621] blur-[100px]"
+          animate={{
+            x: [0, -80, 100, 0],
+            y: [0, -120, 80, 0],
+            scale: [1, 1.3, 0.9, 1],
+          }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
     </section>
   );
 }
