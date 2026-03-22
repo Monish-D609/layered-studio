@@ -94,96 +94,73 @@ function MagnetButton({
 }
 
 export default function HeroSection() {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-
   const scrollTo = (href: string) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    const delays = [
-      { el: headingRef.current, delay: 100 },
-      { el: subRef.current, delay: 400 },
-      { el: ctaRef.current, delay: 650 },
-    ];
-    const timers = delays.map(({ el, delay }) =>
-      setTimeout(() => {
-        if (el) {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-        }
-      }, delay)
-    );
-    return () => timers.forEach(clearTimeout);
-  }, []);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+    }
+  };
 
-  const fadeUp = {
-    opacity: 0,
-    transform: "translateY(32px)",
-    transition: "opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1)",
+  const dropVariants = {
+    hidden: { opacity: 0, y: -40, rotateX: -15, scale: 0.95, filter: "blur(8px)" },
+    show: { 
+      opacity: 1, 
+      y: 0, 
+      rotateX: 0, 
+      scale: 1, 
+      filter: "blur(0px)",
+      transition: { duration: 1.2 } 
+    }
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-20 overflow-hidden grid-bg hero-glow">
-      <div className="max-w-6xl mx-auto w-full">
-
+    <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-20 overflow-hidden grid-bg hero-glow" style={{ perspective: "1200px" }}>
+      <motion.div 
+        className="max-w-6xl mx-auto w-full"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {/* Label */}
-        <div
-          className="section-label mb-10"
-          style={{ ...fadeUp, opacity: 1, transform: "translateY(0)", transition: "none" }}
-        >
+        <motion.div variants={dropVariants} className="section-label mb-10 inline-block">
           Web Design &amp; Development Agency
-        </div>
+        </motion.div>
 
         {/* Headline */}
-        <h1
-          ref={headingRef}
-          style={fadeUp}
-          className="font-bold text-white mb-8"
-        >
-          <span
-            className="block"
-            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}
-          >
+        <h1 className="font-bold text-white mb-8">
+          <motion.span variants={dropVariants} className="block origin-top" style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}>
             We Build Websites
-          </span>
-          <span
-            className="block"
-            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}
-          >
+          </motion.span>
+          <motion.span variants={dropVariants} className="block origin-top" style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}>
             That Feel Like
-          </span>
-          <span
-            className="block"
-            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}
-          >
+          </motion.span>
+          <motion.span variants={dropVariants} className="block origin-top" style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}>
             Products.
-          </span>
+          </motion.span>
         </h1>
 
         {/* Subheading */}
-        <p
-          ref={subRef}
-          style={fadeUp}
-          className="text-white/45 text-base md:text-lg max-w-md mb-12 leading-relaxed"
-        >
+        <motion.p variants={dropVariants} className="text-white/45 text-base md:text-lg max-w-md mb-12 leading-relaxed">
           Layered Studio designs and develops powerful websites for startups and
           businesses that want to stand out online.
-        </p>
+        </motion.p>
 
         {/* CTAs */}
-        <div ref={ctaRef} style={fadeUp} className="flex flex-wrap gap-4">
+        <motion.div variants={dropVariants} className="flex flex-wrap gap-4">
           <MagnetButton variant="primary" onClick={() => scrollTo("#contact")}>
             Start Your Project
           </MagnetButton>
           <MagnetButton variant="secondary" onClick={() => scrollTo("#work")}>
             View Work
           </MagnetButton>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-bounce">
