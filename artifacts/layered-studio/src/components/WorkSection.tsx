@@ -4,39 +4,51 @@ import { motion, AnimatePresence, PanInfo } from "framer-motion";
 const projects = [
   {
     number: "01",
-    type: "TECH STARTUP WEBSITE",
+    type: "AI SaaS Platform",
+    name: "NovaAI Dashboard",
+    desc: "A futuristic analytics dashboard designed for AI-driven business insights.",
+  },
+  {
+    number: "02",
+    type: "Creative Agency Website",
+    name: "Lumina Studio",
+    desc: "Minimal cinematic website crafted for a modern digital design studio.",
+  },
+  {
+    number: "03",
+    type: "Fintech Platform",
+    name: "Pulse Finance",
+    desc: "A sleek financial analytics platform with powerful data visualization.",
+  },
+  {
+    number: "04",
+    type: "Tech Startup Website",
     name: "Vertex Labs",
     desc: "Premium landing experience for a deep-tech startup building next-generation tools.",
   },
   {
-    number: "02",
-    type: "SAAS DASHBOARD",
-    name: "Orbit",
-    desc: "Interactive analytics dashboard with immersive data visualization and real-time updates.",
-  },
-  {
-    number: "03",
-    type: "AI PLATFORM",
-    name: "NeuralFlow",
-    desc: "Cinematic website for an AI research company with scroll-driven storytelling.",
-  },
-  {
-    number: "04",
-    type: "DESIGNER PORTFOLIO",
+    number: "05",
+    type: "Designer Portfolio",
     name: "Orbit Portfolio",
     desc: "Interactive portfolio website with immersive scroll storytelling.",
   },
   {
-    number: "05",
-    type: "E-COMMERCE PLATFORM",
+    number: "06",
+    type: "E-commerce Platform",
     name: "Zenith Commerce",
     desc: "Elegant storefront design with smooth browsing and modern UI interactions.",
   },
   {
-    number: "06",
-    type: "FINTECH APP",
-    name: "Meridian",
-    desc: "Clean, trustworthy financial platform with crisp data hierarchy and micro-animations.",
+    number: "07",
+    type: "SaaS Platform",
+    name: "Astra Cloud",
+    desc: "Cloud infrastructure dashboard focused on performance monitoring and scalability.",
+  },
+  {
+    number: "08",
+    type: "AI Productivity Tool",
+    name: "NeuroFlow AI",
+    desc: "AI-powered workflow platform designed to automate complex business operations.",
   },
 ];
 
@@ -72,7 +84,10 @@ export default function WorkSection() {
         <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#6E8898] mb-4">
           PORTFOLIO
         </div>
-        <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
+        <h2 
+          className="text-4xl md:text-[56px] font-normal text-white tracking-wide"
+          style={{ fontFamily: "'Outfit', sans-serif" }}
+        >
           Selected Work
         </h2>
       </div>
