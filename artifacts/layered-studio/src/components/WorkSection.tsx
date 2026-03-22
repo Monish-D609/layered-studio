@@ -56,27 +56,31 @@ export default function WorkSection() {
 
       {/* Lotus 3D Coverflow Carousel - Perspective is key for rotateY */}
       <div 
-        className="relative h-[450px] md:h-[550px] w-full max-w-[1400px] mx-auto flex items-center justify-center"
+        className="relative h-[450px] md:h-[550px] w-full mx-auto flex items-center justify-center overflow-hidden"
         style={{ perspective: "1500px" }}
       >
         <AnimatePresence initial={false}>
           {projects.map((proj, index) => {
             const offset = index - currentIndex;
+            const absOffset = Math.abs(offset);
             const isCenter = offset === 0;
 
-            // Lotus Architecture:
-            // Center is flat (rotateY: 0)
-            // Left cards look right (rotateY: 30)
-            // Right cards look left (rotateY: -30)
+            // Lotus Architecture (Looking inward):
             const rotateY = isCenter ? 0 : offset > 0 ? -25 : 25;
             
-            // Tighter overlapping so the rotated cards clearly tuck behind
-            const xOffset = offset * 220; 
-            const scale = isCenter ? 1 : 0.8;
-            const zIndex = 50 - Math.abs(offset);
+            // Progressive Spacing: Ensure at least 2 cards fit clearly on each side before clipping.
+            // On desktop: center(0) -> side(320) -> far-side(640) 
+            const xOffset = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 220 : 340);
             
-            // Heavy dimming on side cards to match screenshot precisely
-            const opacity = isCenter ? 1 : 0.25;
+            // Progressive Scaling & Depth
+            const scale = isCenter ? 1 : Math.max(0.6, 0.9 - absOffset * 0.15);
+            const zIndex = 50 - absOffset;
+            
+            // Progressive Fading/Dilution: 100% -> 50% -> 15% -> 0%
+            let opacity = 1;
+            if (absOffset === 1) opacity = 0.5;
+            if (absOffset === 2) opacity = 0.15;
+            if (absOffset >= 3) opacity = 0; // Hide anything further than 2 cards away
 
             return (
               <motion.div
@@ -129,9 +133,12 @@ export default function WorkSection() {
                   </p>
                 </motion.div>
 
-                {/* Darken overlay for side cards to emphasize the lotus structure */}
+                {/* Progressive Darken overlay for side cards to structurally fade them */}
                 {!isCenter && (
-                  <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+                  <div 
+                    className="absolute inset-0 pointer-events-none" 
+                    style={{ background: `rgba(0,0,0, ${0.4 + absOffset * 0.1})` }}
+                  />
                 )}
               </motion.div>
             );
