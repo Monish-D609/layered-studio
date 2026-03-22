@@ -59,13 +59,10 @@ export default function Navbar() {
           px-4 h-14 rounded-2xl
           transition-all duration-500 ease-out
           ${scrolled
-            ? "bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/[0.08] shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_8px_40px_rgba(0,0,0,0.6)]"
-            : "bg-white/[0.03] backdrop-blur-md border border-white/[0.06]"
+            ? "bg-[#080808]/40 backdrop-blur-2xl border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.8)]"
+            : "bg-white/[0.02] backdrop-blur-xl border border-white/[0.06]"
           }
         `}
-        style={scrolled ? {
-          background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
-        } : {}}
       >
         {/* Logo */}
         <button
