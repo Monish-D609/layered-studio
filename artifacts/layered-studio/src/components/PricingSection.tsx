@@ -1,4 +1,5 @@
 import { Check, Minus } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface Feature {
   label: string;
@@ -78,17 +79,28 @@ export default function PricingSection() {
   return (
     <section id="pricing" className="py-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16 text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-16 text-center"
+        >
           <div className="section-label mb-4">Investment</div>
           <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight">
             Pricing
           </h2>
-        </div>
+        </motion.div>
 
         {/* Cards: popular card sits higher / is taller */}
         <div className="flex flex-col md:flex-row gap-4 md:gap-5 items-start justify-center">
-          {plans.map((plan) => (
-            <div
+          {plans.map((plan, idx) => (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, delay: 0.1 + idx * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3, ease: "easeOut" } }}
               key={plan.name}
               className={`relative flex flex-col w-full md:w-[340px] rounded-2xl border transition-all duration-300
                 ${plan.popular
@@ -184,7 +196,7 @@ export default function PricingSection() {
                   {plan.cta}
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

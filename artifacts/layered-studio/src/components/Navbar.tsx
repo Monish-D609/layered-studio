@@ -49,7 +49,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4 pointer-events-none">
+    <header className="fixed top-0 left-0 right-0 z-[999] flex justify-center pt-4 px-4 pointer-events-none">
 
       {/* ── Main bar ── */}
       <nav
@@ -121,7 +121,7 @@ export default function Navbar() {
                 background: "linear-gradient(105deg, transparent 40%, rgba(0,0,0,0.06) 50%, transparent 60%)",
               }}
             />
-            <span className="relative">Get Started →</span>
+            <span className="relative">Contact →</span>
           </button>
         </div>
 
@@ -162,7 +162,7 @@ export default function Navbar() {
             onClick={() => scrollTo("#contact")}
             className="text-left text-sm font-semibold py-2.5 px-3 rounded-xl bg-white text-[#080808]"
           >
-            Get Started →
+            Contact →
           </button>
         </div>
       )}
