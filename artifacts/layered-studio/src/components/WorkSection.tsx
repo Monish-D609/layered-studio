@@ -106,7 +106,7 @@ export default function WorkSection() {
             
             // Eliminate the fade entirely to keep the outer cards extremely bold and prominent
             let opacity = 1;
-            if (absOffset >= 3) opacity = 0; // Still hide anything mathematically way off-track
+            if (absOffset > 10) opacity = 0; // Allow cards to run completely off the edges without artificially disappearing on wide screens
 
             return (
               <motion.div

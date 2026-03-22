@@ -7,6 +7,7 @@ const navLinks = [
   { label: "Work",         href: "#work"          },
   { label: "Pricing",      href: "#pricing"       },
   { label: "About",        href: "#about"         },
+  { label: "Contact",      href: "#contact"       },
 ];
 
 export default function Navbar() {
@@ -97,33 +98,12 @@ export default function Navbar() {
               }}
               onClick={() => scrollTo(link.href)}
               onMouseEnter={() => setHoveredIdx(i)}
-              className="relative z-10 text-[13px] text-white/80 hover:text-white transition-colors duration-150 px-4 py-2 rounded-lg font-normal tracking-wide"
+              className="relative z-10 text-[11px] text-white/70 hover:text-white transition-colors duration-150 px-4 py-2 rounded-lg font-semibold tracking-[0.15em] uppercase"
               style={{ fontFamily: "'Outfit', sans-serif" }}
             >
               {link.label}
             </button>
           ))}
-        </div>
-
-        {/* CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <button
-            onClick={() => scrollTo("#contact")}
-            className="relative text-[13px] font-semibold px-5 py-2 rounded-xl overflow-hidden group"
-            style={{
-              background: "white",
-              color: "#080808",
-            }}
-          >
-            {/* Shimmer */}
-            <span
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{
-                background: "linear-gradient(105deg, transparent 40%, rgba(0,0,0,0.06) 50%, transparent 60%)",
-              }}
-            />
-            <span className="relative">Contact →</span>
-          </button>
         </div>
 
         {/* Mobile hamburger */}
