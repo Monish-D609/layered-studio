@@ -92,10 +92,12 @@ export default function Navbar() {
           {navLinks.map((link, i) => (
             <button
               key={link.label}
-              ref={el => { btnRefs.current[i] = el; }}
+              ref={(el) => {
+                btnRefs.current[i] = el;
+              }}
               onClick={() => scrollTo(link.href)}
               onMouseEnter={() => setHoveredIdx(i)}
-              className="relative z-10 text-[13px] text-white/50 hover:text-white/90 transition-colors duration-150 px-4 py-2 rounded-lg font-medium"
+              className="relative z-10 text-[13px] text-white/80 hover:text-white transition-colors duration-150 px-4 py-2 rounded-lg font-normal tracking-wide"
             >
               {link.label}
             </button>
