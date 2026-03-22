@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 
 const projects = [
@@ -42,24 +42,27 @@ const projects = [
 
 export default function WorkSection() {
   const [currentIndex, setCurrentIndex] = useState(4); // Start at 05 as in screenshot
+  const dragStartRef = useRef(currentIndex);
 
-  // 1:1 Drag Gesture Handler
-  const handleDragEnd = (event: any, info: PanInfo) => {
-    // The base distance representing one card hop
-    const baseSpread = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 250;
+  // Real-time Scrub Gesture Handlers
+  const handlePanStart = () => {
+    // Record the active index precisely when the user grabs the carousel
+    dragStartRef.current = currentIndex;
+  };
+
+  const handlePan = (event: any, info: PanInfo) => {
+    // 120px physical drag threshold = 1 index jump
+    // Negative offset means user dragged left, which means we want to advance index (+)
+    const swipeDelta = Math.round(-info.offset.x / 120);
     
-    // Calculate total "momentum" with a very subtle velocity assist, so it doesn't slingshot out of control
-    const momentum = info.offset.x + (info.velocity.x * 0.05); 
+    // Add delta to the starting index
+    const nextIndex = dragStartRef.current + swipeDelta;
+    const clampedIndex = Math.max(0, Math.min(nextIndex, projects.length - 1));
     
-    // Determine how many indices to jump based on how fast and far the user dragged
-    // Note: dragging left generates negative momentum, which should uniquely jump the index forward (+)
-    const indexChange = Math.round(momentum / -baseSpread);
-    
-    if (indexChange !== 0) {
-      setCurrentIndex((prev) => {
-        const next = prev + indexChange;
-        return Math.max(0, Math.min(next, projects.length - 1));
-      });
+    // If the drag crosses the threshold into the next mathematical cell, immediately update it!
+    // This allows the cards to dynamically spin in/out of center LIVE as the cursor is moving.
+    if (clampedIndex !== currentIndex) {
+      setCurrentIndex(clampedIndex);
     }
   };
 
@@ -76,15 +79,13 @@ export default function WorkSection() {
 
       {/* 
         Interactive 3D Perspective Drag Container
-        Moves 1:1 with the mouse, then securely snaps back to index center geometry 
+        Now uses onPan to dynamically swap indices mid-drag without physically distorting the outer container!
       */}
       <motion.div 
         className="relative h-[380px] md:h-[480px] w-full mx-auto flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing"
-        style={{ perspective: "1500px" }}
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.05} // Very stiff, prevents dragging too far physically so it doesn't snap back violently
-        onDragEnd={handleDragEnd}
+        style={{ perspective: "1500px", touchAction: "none" }} // touchAction required to trap panning perfectly
+        onPanStart={handlePanStart}
+        onPan={handlePan}
       >
         <AnimatePresence initial={false}>
           {projects.map((proj, index) => {
