@@ -43,7 +43,7 @@ export default function Footer() {
           <p className="text-white/20 text-sm">
             © 2026 Layered Studio. All rights reserved.
           </p>
-
+ 
           <div className="flex items-center gap-6">
             <a 
               href="mailto:layeredstudio.in@gmail.com" 

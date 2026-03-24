@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 function MagnetButton({
   children,
@@ -11,49 +11,43 @@ function MagnetButton({
   variant?: "primary" | "secondary";
 }) {
   const btnRef = useRef<HTMLButtonElement>(null);
-  const baseRect = useRef<DOMRect | null>(null);
-
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [hovering, setHovering] = useState(false);
 
-  const handleMouseEnter = () => {
-    setHovering(true);
-    if (btnRef.current) {
-      baseRect.current = btnRef.current.getBoundingClientRect();
-    }
-  };
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 20, stiffness: 150 };
+  const translateX = useSpring(0, springConfig);
+  const translateY = useSpring(0, springConfig);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!baseRect.current) return;
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
     
-    // Calculate off the static un-transformed dimensions captured at mouse enter
-    // This prevents the button from "jittering" as its own movement changes the bounding rect
-    const rect = baseRect.current;
-    
-    // Position inside the original un-shifted bounding box for the spotlight
-    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    // Position for spotlight
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
 
-    // Physical button stickiness - calculates delta from the exact center of the button
+    // Physical button stickiness
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
-    setTranslate({
-      x: (e.clientX - centerX) * 0.25, // 0.25 stickiness factor
-      y: (e.clientY - centerY) * 0.25,
-    });
+    translateX.set((e.clientX - centerX) * 0.25);
+    translateY.set((e.clientY - centerY) * 0.25);
   };
 
+  const handleMouseEnter = () => setHovering(true);
+  
   const handleMouseLeave = () => {
     setHovering(false);
-    setTranslate({ x: 0, y: 0 }); // snap back to pure center
-    baseRect.current = null;
+    translateX.set(0);
+    translateY.set(0);
   };
 
   const isPrimary = variant === "primary";
 
   return (
-    <button
+    <motion.button
       ref={btnRef}
       onClick={onClick}
       onMouseMove={handleMouseMove}
@@ -66,30 +60,29 @@ function MagnetButton({
       }`}
       style={{
         cursor: "none",
-        transform: `translate(${translate.x}px, ${translate.y}px)`,
-        // Instant/linear tracking while hovering, smoothly snapping spring while exiting
-        transition: hovering 
-          ? "transform 0.1s linear, background-color 0.3s, border-color 0.3s"
-          : "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s, border-color 0.3s"
+        x: translateX,
+        y: translateY,
       }}
     >
       {/* Background Hover Circle */}
-      <div
-        className="absolute w-[180px] h-[180px] rounded-full pointer-events-none transition-opacity duration-300 z-0"
+      <motion.div
+        className="absolute w-[180px] h-[180px] rounded-full pointer-events-none z-0"
         style={{
-          left: pos.x - 90,
-          top: pos.y - 90,
+          left: mouseX,
+          top: mouseY,
+          x: "-50%",
+          y: "-50%",
           opacity: hovering ? 1 : 0,
           background: isPrimary ? "#161616" : "#e5e5e5",
-          transform: `scale(${hovering ? 1 : 0})`,
-          transition: "transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s",
+          scale: hovering ? 1 : 0,
         }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
       />
-      {/* Text with Difference Blending to auto-invert against the background */}
+      {/* Text with Difference Blending */}
       <span className="relative z-10 mix-blend-difference text-white pointer-events-none">
         {children}
       </span>
-    </button>
+    </motion.button>
   );
 }
 
@@ -168,34 +161,41 @@ export default function HeroSection() {
         <span className="text-white/20 text-[10px] tracking-[0.25em]">SCROLL</span>
       </div>
 
-      {/* Premium Animated Aurora Mesh */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-screen opacity-50 z-0">
-        <motion.div
-          className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#1b253b] blur-[120px]"
-          animate={{
-            x: [0, -100, 50, 0],
-            y: [0, 100, -50, 0],
-            scale: [1, 1.1, 0.9, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      {/* Independent Hardware-Accelerated CSS Keyframes */}
+      <style>{`
+        @keyframes drift1 {
+          0% { transform: translate3d(0px, 0px, 0px); }
+          33% { transform: translate3d(-100px, 100px, 0px); }
+          66% { transform: translate3d(50px, -50px, 0px); }
+          100% { transform: translate3d(0px, 0px, 0px); }
+        }
+        @keyframes drift2 {
+          0% { transform: translate3d(0px, 0px, 0px); }
+          33% { transform: translate3d(150px, -100px, 0px); }
+          66% { transform: translate3d(-50px, 50px, 0px); }
+          100% { transform: translate3d(0px, 0px, 0px); }
+        }
+        @keyframes drift3 {
+          0% { transform: translate3d(0px, 0px, 0px); }
+          33% { transform: translate3d(-80px, -120px, 0px); }
+          66% { transform: translate3d(100px, 80px, 0px); }
+          100% { transform: translate3d(0px, 0px, 0px); }
+        }
+      `}</style>
+
+      {/* Premium Aurora Mesh - GPU Optimized Architecture */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40 z-0" style={{ transform: "translateZ(0)" }}>
+        <div
+          className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#1b253b] blur-[80px]"
+          style={{ animation: "drift1 20s infinite linear", willChange: "transform" }}
         />
-        <motion.div
-          className="absolute bottom-[-10%] left-[5%] w-[600px] h-[600px] rounded-full bg-[#3c2a38] blur-[100px]"
-          animate={{
-            x: [0, 150, -50, 0],
-            y: [0, -100, 50, 0],
-            scale: [1, 1.2, 0.8, 1],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        <div
+          className="absolute bottom-[-10%] left-[5%] w-[600px] h-[600px] rounded-full bg-[#3c2a38] blur-[80px]"
+          style={{ animation: "drift2 25s infinite linear", willChange: "transform" }}
         />
-        <motion.div
-          className="absolute top-[40%] left-[30%] w-[500px] h-[500px] rounded-full bg-[#142621] blur-[100px]"
-          animate={{
-            x: [0, -80, 100, 0],
-            y: [0, -120, 80, 0],
-            scale: [1, 1.3, 0.9, 1],
-          }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        <div
+          className="absolute top-[40%] left-[30%] w-[500px] h-[500px] rounded-full bg-[#142621] blur-[80px]"
+          style={{ animation: "drift3 30s infinite linear", willChange: "transform" }}
         />
       </div>
     </section>
