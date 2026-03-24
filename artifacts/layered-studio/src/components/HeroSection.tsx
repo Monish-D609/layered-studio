@@ -127,13 +127,25 @@ export default function HeroSection() {
 
         {/* Headline */}
         <h1 className="font-bold text-white mb-8">
-          <motion.span variants={dropVariants} className="block origin-top" style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}>
+          <motion.span 
+            variants={dropVariants} 
+            className="block origin-top bg-gradient-to-b from-white via-white/90 to-white/40 bg-clip-text text-transparent" 
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em", textShadow: "0 0 30px rgba(255,255,255,0.1)" }}
+          >
             We Build Websites
           </motion.span>
-          <motion.span variants={dropVariants} className="block origin-top" style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}>
+          <motion.span 
+            variants={dropVariants} 
+            className="block origin-top bg-gradient-to-b from-white via-white/80 to-white/30 bg-clip-text text-transparent" 
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em", textShadow: "0 0 40px rgba(255,255,255,0.05)" }}
+          >
             That Feel Like
           </motion.span>
-          <motion.span variants={dropVariants} className="block origin-top" style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em" }}>
+          <motion.span 
+            variants={dropVariants} 
+            className="block origin-top bg-gradient-to-b from-white via-white/70 to-white/20 bg-clip-text text-transparent" 
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em", textShadow: "0 0 50px rgba(255,255,255,0.05)" }}
+          >
             Products.
           </motion.span>
         </h1>
