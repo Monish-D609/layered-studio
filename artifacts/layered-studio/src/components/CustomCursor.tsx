@@ -3,69 +3,36 @@ import useDeviceCapabilities from "@/hooks/use-device-capabilities";
 
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const { finePointer, prefersReducedMotion, lowPower } = useDeviceCapabilities();
+  const { finePointer } = useDeviceCapabilities();
 
   useEffect(() => {
-    if (!finePointer || prefersReducedMotion || lowPower) {
+    if (!finePointer) {
       return;
     }
 
     const dot = dotRef.current;
-    const ring = ringRef.current;
-    if (!dot || !ring) return;
+    if (!dot) return;
 
-    const interactiveSelector = "a, button, [data-cursor-hover]";
+    // Add class to document to safely hide default cursor via CSS
+    document.documentElement.classList.add("has-custom-cursor");
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-    let raf = 0;
-    let active = false;
+    const interactiveSelector = "a, button, [data-cursor-hover], input, select, textarea";
 
-    dot.style.opacity = "0";
-    ring.style.opacity = "0";
-
-    const applyHoverState = (hovered: boolean) => {
-      ring.classList.toggle("hovered", hovered);
-    };
-
-    const animate = () => {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-
-      if (Math.abs(mouseX - ringX) > 0.1 || Math.abs(mouseY - ringY) > 0.1) {
-        raf = requestAnimationFrame(animate);
-        return;
-      }
-
-      active = false;
-    };
-
-    const startAnimation = () => {
-      if (active) return;
-      active = true;
-      raf = requestAnimationFrame(animate);
-    };
-
+    let mouseX = -100;
+    let mouseY = -100;
+    
     const onPointerMove = (event: PointerEvent) => {
       mouseX = event.clientX;
       mouseY = event.clientY;
 
       dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-      dot.style.opacity = "1";
-      ring.style.opacity = "1";
-
-      startAnimation();
+      if (dot.style.opacity !== "1") dot.style.opacity = "1";
     };
 
     const onPointerOver = (event: PointerEvent) => {
       const target = event.target as Element | null;
       if (target?.closest(interactiveSelector)) {
-        applyHoverState(true);
+        dot.classList.add("hovered");
       }
     };
 
@@ -73,21 +40,14 @@ export default function CustomCursor() {
       const target = event.target as Element | null;
       const relatedTarget = event.relatedTarget as Element | null;
 
-      if (!target?.closest(interactiveSelector)) {
-        return;
-      }
+      if (!target?.closest(interactiveSelector)) return;
+      if (relatedTarget?.closest(interactiveSelector)) return;
 
-      if (relatedTarget?.closest(interactiveSelector)) {
-        return;
-      }
-
-      applyHoverState(false);
+      dot.classList.remove("hovered");
     };
 
     const onWindowBlur = () => {
       dot.style.opacity = "0";
-      ring.style.opacity = "0";
-      applyHoverState(false);
     };
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
@@ -96,30 +56,23 @@ export default function CustomCursor() {
     window.addEventListener("blur", onWindowBlur);
 
     return () => {
+      document.documentElement.classList.remove("has-custom-cursor");
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("pointerover", onPointerOver, true);
       document.removeEventListener("pointerout", onPointerOut, true);
       window.removeEventListener("blur", onWindowBlur);
-      cancelAnimationFrame(raf);
     };
-  }, [finePointer, prefersReducedMotion, lowPower]);
+  }, [finePointer]);
 
-  if (!finePointer || prefersReducedMotion || lowPower) {
+  if (!finePointer) {
     return null;
   }
 
   return (
-    <>
-      <div
-        ref={dotRef}
-        className="cursor-dot"
-        style={{ transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)" }}
-      />
-      <div
-        ref={ringRef}
-        className="cursor-ring"
-        style={{ transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)" }}
-      />
-    </>
+    <div
+      ref={dotRef}
+      className="cursor-dot"
+      style={{ opacity: 0 }}
+    />
   );
 }
