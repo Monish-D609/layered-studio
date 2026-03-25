@@ -1,48 +1,58 @@
 import { useState } from "react";
 import { CalendarDays, Clock } from "lucide-react";
+import { buildGoogleFormUrl } from "@/lib/googleForm";
 
 const budgets = [
-  "₹4,000 – ₹5,000 (Starter)",
-  "₹6,000 – ₹12,000 (Professional)",
-  "₹15,000+ (Premium)",
+  "Rs. 4,000 - Rs. 5,000 (Starter)",
+  "Rs. 6,000 - Rs. 12,000 (Professional)",
+  "Rs. 15,000+ (Premium)",
   "Custom Budget",
   "Not sure yet",
 ];
 
 const timeSlots = [
-  "9:00 AM – 10:00 AM",
-  "10:00 AM – 11:00 AM",
-  "11:00 AM – 12:00 PM",
-  "12:00 PM – 1:00 PM",
-  "2:00 PM – 3:00 PM",
-  "3:00 PM – 4:00 PM",
-  "4:00 PM – 5:00 PM",
-  "5:00 PM – 6:00 PM",
-  "7:00 PM – 8:00 PM",
-  "8:00 PM – 9:00 PM",
-  "9:00 PM – 10:00 PM",
+  "9:00 AM - 10:00 AM",
+  "10:00 AM - 11:00 AM",
+  "11:00 AM - 12:00 PM",
+  "12:00 PM - 1:00 PM",
+  "2:00 PM - 3:00 PM",
+  "3:00 PM - 4:00 PM",
+  "4:00 PM - 5:00 PM",
+  "5:00 PM - 6:00 PM",
+  "7:00 PM - 8:00 PM",
+  "8:00 PM - 9:00 PM",
+  "9:00 PM - 10:00 PM",
 ];
 
-// Get today's date and next 14 days
+function formatDateValue(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 function getAvailableDates() {
   const dates: { label: string; value: string }[] = [];
   const today = new Date();
+
   for (let i = 1; i <= 14; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    const day = d.getDay();
-    if (day !== 0 && day !== 6) {
-      // Skip weekends
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + i);
+
+    const dayOfWeek = nextDate.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
       dates.push({
-        label: d.toLocaleDateString("en-IN", {
+        label: nextDate.toLocaleDateString("en-IN", {
           weekday: "short",
           month: "short",
           day: "numeric",
         }),
-        value: d.toISOString().split("T")[0],
+        value: formatDateValue(nextDate),
       });
     }
   }
+
   return dates;
 }
 
@@ -54,9 +64,12 @@ export default function ContactSection() {
     budget: "",
     message: "",
   });
-  const [selectedDate, setSelectedDate] = useState<{ label: string; value: string } | null>(null);
+  const [selectedDate, setSelectedDate] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
   const [selectedTime, setSelectedTime] = useState("");
-  const [sending, setSending] = useState(false);
+  const [submittedGoogleFormUrl, setSubmittedGoogleFormUrl] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
@@ -70,37 +83,32 @@ export default function ContactSection() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSending(true);
     setError("");
 
-    try {
-      const apiUrl = import.meta.env.DEV ? "http://localhost:5000/send-email" : "/api/send-email";
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: form.name,
-          email: form.email,
-          phone: form.phone,
-          budget: form.budget,
-          projectDetails: form.message,
-          selectedDate: selectedDate?.label,
-          selectedTime: selectedTime,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setSent(true);
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
-    } catch {
-      setError("Could not reach the server. Please try again.");
-    } finally {
-      setSending(false);
+    const nextGoogleFormUrl = buildGoogleFormUrl({
+      fullName: form.name,
+      email: form.email,
+      phone: form.phone,
+      budget: form.budget,
+      projectDetails: form.message,
+      preferredCallSlot:
+        selectedDate && selectedTime
+          ? `${selectedDate.label} at ${selectedTime}`
+          : "",
+    });
+
+    if (!nextGoogleFormUrl) {
+      setError(
+        "Google Form is not configured yet. Add your pre-filled form link in src/lib/googleForm.ts."
+      );
+      return;
     }
+
+    window.open(nextGoogleFormUrl, "_blank", "noopener,noreferrer");
+    setSubmittedGoogleFormUrl(nextGoogleFormUrl);
+    setSent(true);
   };
 
   if (sent) {
@@ -108,12 +116,35 @@ export default function ContactSection() {
       <section id="contact" className="py-32 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <div className="w-16 h-16 bg-white/[0.08] border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-2xl text-[#d1d1d1]">✓</span>
+            <span className="text-lg font-semibold text-[#d1d1d1]">OK</span>
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Message Sent!</h3>
-          <p className="text-theme-muted">
-            We'll get back to you within 24 hours to discuss your project.
+          <h3 className="text-3xl font-bold text-white mb-4">
+            Continue in Google Forms
+          </h3>
+          <p className="text-theme-muted max-w-xl mx-auto">
+            Your website details are ready in a pre-filled Google Form. Open it
+            below and submit there to finish the inquiry.
           </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href={submittedGoogleFormUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-sm"
+            >
+              Open Google Form {"->"}
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                setSent(false);
+                setError("");
+              }}
+              className="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-sm border border-white/10 text-white/80 hover:text-white transition-colors"
+            >
+              Edit Details
+            </button>
+          </div>
         </div>
       </section>
     );
@@ -130,12 +161,12 @@ export default function ContactSection() {
             Your Vision Online?
           </h2>
           <p className="text-theme-muted mt-4 text-lg max-w-md mx-auto">
-            Tell us about your project and we'll craft a plan that brings it to life.
+            Tell us about your project and we will carry those details into
+            Google Forms instead of sending them by email.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
@@ -194,9 +225,9 @@ export default function ContactSection() {
                 className="form-input"
               >
                 <option value="">Select a budget range...</option>
-                {budgets.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
+                {budgets.map((budget) => (
+                  <option key={budget} value={budget}>
+                    {budget}
                   </option>
                 ))}
               </select>
@@ -216,20 +247,16 @@ export default function ContactSection() {
               />
             </div>
 
-            {error && (
-              <p className="text-red-400 text-sm">{error}</p>
-            )}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
 
             <button
               type="submit"
-              disabled={sending}
-              className="btn-primary w-full py-4 rounded-full font-semibold text-sm disabled:opacity-50"
+              className="btn-primary w-full py-4 rounded-full font-semibold text-sm"
             >
-              {sending ? "Sending..." : "Send Message →"}
+              Continue to Google Form {"->"}
             </button>
           </form>
 
-          {/* Schedule a call */}
           <div>
             <div className="flex items-center gap-3 mb-6">
               <CalendarDays size={18} className="text-theme-muted" />
@@ -237,10 +264,10 @@ export default function ContactSection() {
             </div>
 
             <p className="text-theme-muted text-sm mb-6">
-              Pick a date and time that works for you. We'll reach out to confirm.
+              Pick a date and time that works for you so it can be included in
+              the Google Form.
             </p>
 
-            {/* Date picker */}
             <div className="mb-6">
               <label className="block text-theme-muted text-xs mb-3">
                 Select Date
@@ -250,9 +277,13 @@ export default function ContactSection() {
                   <button
                     key={date.value}
                     type="button"
-                    onClick={() => setSelectedDate(date)}
-                    className={`time-slot text-xs ${selectedDate?.value === date.value ? "selected" : ""
-                      }`}
+                    onClick={() => {
+                      setSelectedDate(date);
+                      setSelectedTime("");
+                    }}
+                    className={`time-slot text-xs ${
+                      selectedDate?.value === date.value ? "selected" : ""
+                    }`}
                   >
                     {date.label}
                   </button>
@@ -260,7 +291,6 @@ export default function ContactSection() {
               </div>
             </div>
 
-            {/* Time slots */}
             {selectedDate?.value && (
               <div>
                 <div className="flex items-center gap-2 mb-3">
@@ -273,8 +303,9 @@ export default function ContactSection() {
                       key={slot}
                       type="button"
                       onClick={() => setSelectedTime(slot)}
-                      className={`time-slot ${selectedTime === slot ? "selected" : ""
-                        }`}
+                      className={`time-slot ${
+                        selectedTime === slot ? "selected" : ""
+                      }`}
                     >
                       {slot}
                     </button>
@@ -290,7 +321,7 @@ export default function ContactSection() {
                   {selectedDate.label} at {selectedTime}
                 </p>
                 <p className="text-white/30 text-xs mt-1">
-                  Include this in your form submission above.
+                  This will be carried into the Google Form.
                 </p>
               </div>
             )}
