@@ -1,13 +1,19 @@
 ## Google Form Setup
 
-Create a Google Form with these fields so the website can pre-fill it:
+This project is already wired to your live Google Form using these entry IDs:
 
-- `Full Name` as a short answer and required
-- `Email Address` as a short answer and required
-- `Contact Number` as a short answer
-- `Estimated Budget Range` as a dropdown or multiple choice and required
-- `Project Details` as a paragraph
-- `Preferred Call Slot` as a short answer
+- `Full Name` -> `entry.1730673321`
+- `Email Address` -> `entry.159390796`
+- `Contact Number` -> `entry.1587624489`
+- `Estimated Budget Range` -> `entry.163217131`
+- `Project Details` -> `entry.2016074230`
+- `Preferred Call Slot` -> `entry.1294472050`
+
+The current prefilled URL stored in the app is:
+
+`https://docs.google.com/forms/d/e/1FAIpQLSfTVOQnrJfACFdQqAzP2oTRWUimLUE593EPCT-Th1opPBd4vA/viewform?usp=pp_url&entry.1730673321=__FULL_NAME__&entry.159390796=__EMAIL__&entry.1587624489=__PHONE__&entry.163217131=Rs.+6,000+-+Rs.+12,000+(Professional)&entry.2016074230=__PROJECT_DETAILS__&entry.1294472050=__PREFERRED_CALL_SLOT__`
+
+If you ever regenerate the form, keep the same field names and update the entry IDs in [googleForm.ts](./src/lib/googleForm.ts) if Google assigns new ones.
 
 Use the same budget labels as the website:
 
