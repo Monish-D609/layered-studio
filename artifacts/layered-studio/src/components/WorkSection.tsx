@@ -79,7 +79,7 @@ export default function WorkSection() {
   };
 
   return (
-    <section id="work" className="py-24 overflow-hidden bg-[#080808]">
+    <section id="work" className="py-24 overflow-hidden bg-transparent">
       <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
         <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#6E8898] mb-4">
           PORTFOLIO

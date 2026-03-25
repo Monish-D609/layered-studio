@@ -81,14 +81,14 @@ export default function CapabilitiesSection() {
                 <h3 className="relative z-10 text-white text-2xl font-bold mb-4 group-hover:-translate-y-1 transition-transform duration-300">
                 {cap.title}
               </h3>
-              <p className="relative z-10 text-white/50 text-sm leading-relaxed mb-8 group-hover:text-white/70 transition-colors duration-300">
+              <p className="relative z-10 text-theme-muted text-sm leading-relaxed mb-8 group-hover:text-white/80 transition-colors duration-300">
                 {cap.description}
               </p>
               <div className="relative z-10 flex flex-wrap gap-2">
                 {cap.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs text-white/40 border border-white/10 rounded-full px-3 py-1 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/70 group-hover:border-white/20"
+                    className="text-xs text-theme-muted border border-white/12 rounded-full px-3 py-1 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/80 group-hover:border-white/22"
                   >
                     {tag}
                   </span>

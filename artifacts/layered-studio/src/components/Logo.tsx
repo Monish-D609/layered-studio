@@ -47,15 +47,11 @@ export default function Logo({ size = 32, showText = true, className = "" }: Log
 
       {showText && (
         <span
+          className="text-[17px] font-semibold tracking-tight lowercase text-white/95"
           style={{
-            fontFamily: '"Outfit", sans-serif',
-            fontWeight: 800,
-            fontSize: "18px",
-            letterSpacing: "-0.04em",
-            color: "white",
+            fontFamily: "var(--app-font-sans), 'Inter', sans-serif",
             lineHeight: 1,
-            textTransform: "lowercase",
-            textShadow: "0 4px 20px rgba(255,255,255,0.4)",
+            textShadow: "0 2px 28px rgba(255,255,255,0.12)",
           }}
         >
           layered studio

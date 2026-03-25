@@ -107,11 +107,11 @@ export default function ContactSection() {
     return (
       <section id="contact" className="py-32 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-2xl">✓</span>
+          <div className="w-16 h-16 bg-white/[0.08] border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-2xl text-[#d1d1d1]">✓</span>
           </div>
           <h3 className="text-3xl font-bold text-white mb-4">Message Sent!</h3>
-          <p className="text-white/50">
+          <p className="text-theme-muted">
             We'll get back to you within 24 hours to discuss your project.
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function ContactSection() {
             <br />
             Your Vision Online?
           </h2>
-          <p className="text-white/40 mt-4 text-lg max-w-md mx-auto">
+          <p className="text-theme-muted mt-4 text-lg max-w-md mx-auto">
             Tell us about your project and we'll craft a plan that brings it to life.
           </p>
         </div>
@@ -139,7 +139,7 @@ export default function ContactSection() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-white/40 text-xs mb-2">
+                <label className="block text-theme-muted text-xs mb-2">
                   Full Name *
                 </label>
                 <input
@@ -153,7 +153,7 @@ export default function ContactSection() {
                 />
               </div>
               <div>
-                <label className="block text-white/40 text-xs mb-2">
+                <label className="block text-theme-muted text-xs mb-2">
                   Email Address *
                 </label>
                 <input
@@ -169,7 +169,7 @@ export default function ContactSection() {
             </div>
 
             <div>
-              <label className="block text-white/40 text-xs mb-2">
+              <label className="block text-theme-muted text-xs mb-2">
                 Contact Number
               </label>
               <input
@@ -183,7 +183,7 @@ export default function ContactSection() {
             </div>
 
             <div>
-              <label className="block text-white/40 text-xs mb-2">
+              <label className="block text-theme-muted text-xs mb-2">
                 Estimated Budget Range *
               </label>
               <select
@@ -203,7 +203,7 @@ export default function ContactSection() {
             </div>
 
             <div>
-              <label className="block text-white/40 text-xs mb-2">
+              <label className="block text-theme-muted text-xs mb-2">
                 Project Details (Optional)
               </label>
               <textarea
@@ -232,17 +232,17 @@ export default function ContactSection() {
           {/* Schedule a call */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <CalendarDays size={18} className="text-white/40" />
+              <CalendarDays size={18} className="text-theme-muted" />
               <h3 className="text-white font-semibold">Schedule a Call</h3>
             </div>
 
-            <p className="text-white/40 text-sm mb-6">
+            <p className="text-theme-muted text-sm mb-6">
               Pick a date and time that works for you. We'll reach out to confirm.
             </p>
 
             {/* Date picker */}
             <div className="mb-6">
-              <label className="block text-white/40 text-xs mb-3">
+              <label className="block text-theme-muted text-xs mb-3">
                 Select Date
               </label>
               <div className="flex flex-wrap gap-2">
@@ -264,8 +264,8 @@ export default function ContactSection() {
             {selectedDate?.value && (
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <Clock size={14} className="text-white/40" />
-                  <label className="text-white/40 text-xs">Select Time</label>
+                  <Clock size={14} className="text-theme-muted" />
+                  <label className="text-theme-muted text-xs">Select Time</label>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {timeSlots.map((slot) => (

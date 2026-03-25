@@ -113,7 +113,7 @@ export default function ProcessSection() {
           <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight">
             Process
           </h2>
-          <p className="text-white/40 mt-4 text-lg max-w-md mx-auto leading-relaxed">
+          <p className="text-theme-muted mt-4 text-lg max-w-md mx-auto leading-relaxed">
             A structured approach that delivers exceptional results, every time.
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function ProcessSection() {
               >
                 <div className="text-white/30 text-[11px] font-mono mb-0.5 leading-none">{step.number}</div>
                 <h3 className="text-base font-bold text-white mb-1 leading-snug">{step.title}</h3>
-                <p className="text-[11px] text-white/45 leading-relaxed">{step.desc}</p>
+                <p className="text-[11px] text-theme-muted leading-relaxed">{step.desc}</p>
               </div>
             );
           })}

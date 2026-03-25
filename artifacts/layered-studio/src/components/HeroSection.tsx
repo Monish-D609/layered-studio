@@ -1,5 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, type Variants } from "framer-motion";
+
+// Background image sourced from the Cursor-uploaded shared assets folder.
+// Vite must be allowed to read this path via `vite.config.ts` -> `server.fs.allow`.
+const heroBgUrl = "/assets/hero-bg.png";
 
 function MagnetButton({
   children,
@@ -53,10 +57,10 @@ function MagnetButton({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[12px] font-medium tracking-[0.15em] border ${
+      className={`relative overflow-hidden px-8 py-4 w-60 uppercase text-[11px] font-semibold tracking-[0.18em] rounded-lg border ${
         isPrimary
-          ? "bg-white border-white"
-          : "bg-transparent border-[#222]"
+          ? "bg-[#d1d1d1] border-[#d1d1d1] text-[#0a0a0a]"
+          : "bg-transparent border-white/20 text-white"
       }`}
       style={{
         cursor: "none",
@@ -73,13 +77,16 @@ function MagnetButton({
           x: "-50%",
           y: "-50%",
           opacity: hovering ? 1 : 0,
-          background: isPrimary ? "#161616" : "#e5e5e5",
+          background: isPrimary ? "rgba(10, 10, 10, 0.12)" : "rgba(255, 255, 255, 0.08)",
           scale: hovering ? 1 : 0,
         }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
       />
-      {/* Text with Difference Blending */}
-      <span className="relative z-10 mix-blend-difference text-white pointer-events-none">
+      <span
+        className={`relative z-10 pointer-events-none ${
+          isPrimary ? "text-[#0a0a0a]" : "text-white"
+        }`}
+      >
         {children}
       </span>
     </motion.button>
@@ -100,22 +107,42 @@ export default function HeroSection() {
     }
   };
 
-  const dropVariants = {
-    hidden: { opacity: 0, y: -40, rotateX: -15, scale: 0.95, filter: "blur(8px)" },
+  const dropVariants: Variants = {
+    hidden: { opacity: 0, y: -40, rotateX: -15, scale: 0.95 },
     show: { 
       opacity: 1, 
       y: 0, 
       rotateX: 0, 
       scale: 1, 
-      filter: "blur(0px)",
-      transition: { duration: 1.2 } 
+      transition: { duration: 1.2, ease: "easeOut" } 
     }
   };
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-20 overflow-hidden grid-bg hero-glow" style={{ perspective: "1200px" }}>
+      {/* Hero background image */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url(${heroBgUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "brightness(0.55) contrast(1.08) saturate(1.1)",
+          transform: "translateZ(0)",
+        }}
+      />
+
+      {/* Dark overlay for readable typography */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.70) 55%, rgba(0,0,0,0.80) 100%)",
+        }}
+      />
+
       <motion.div 
-        className="max-w-6xl mx-auto w-full"
+        className="relative z-10 max-w-6xl mx-auto w-full"
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -129,29 +156,29 @@ export default function HeroSection() {
         <h1 className="font-bold text-white mb-8">
           <motion.span 
             variants={dropVariants} 
-            className="block origin-top bg-gradient-to-b from-white via-white/90 to-white/40 bg-clip-text text-transparent" 
-            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em", textShadow: "0 0 30px rgba(255,255,255,0.1)" }}
+            className="block origin-top bg-gradient-to-b from-white via-[#e8e8e8] to-[#9a9a9a] bg-clip-text text-transparent" 
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.06, letterSpacing: "-0.03em" }}
           >
             We Build Websites
           </motion.span>
           <motion.span 
             variants={dropVariants} 
-            className="block origin-top bg-gradient-to-b from-white via-white/80 to-white/30 bg-clip-text text-transparent" 
-            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em", textShadow: "0 0 40px rgba(255,255,255,0.05)" }}
+            className="block origin-top bg-gradient-to-b from-white via-[#dedede] to-[#8a8a8a] bg-clip-text text-transparent" 
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.06, letterSpacing: "-0.03em" }}
           >
             That Feel Like
           </motion.span>
           <motion.span 
             variants={dropVariants} 
-            className="block origin-top bg-gradient-to-b from-white via-white/70 to-white/20 bg-clip-text text-transparent" 
-            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.08, letterSpacing: "-0.025em", textShadow: "0 0 50px rgba(255,255,255,0.05)" }}
+            className="block origin-top bg-gradient-to-b from-white via-[#d4d4d4] to-[#7a7a7a] bg-clip-text text-transparent" 
+            style={{ fontSize: "clamp(2.6rem, 6vw, 6rem)", lineHeight: 1.06, letterSpacing: "-0.03em" }}
           >
             Products.
           </motion.span>
         </h1>
 
         {/* Subheading */}
-        <motion.p variants={dropVariants} className="text-white/45 text-base md:text-lg max-w-md mb-12 leading-relaxed">
+        <motion.p variants={dropVariants} className="text-theme-muted text-base md:text-lg max-w-md mb-12 leading-relaxed">
           Layered Studio designs and develops powerful websites for startups and
           businesses that want to stand out online.
         </motion.p>
@@ -169,8 +196,8 @@ export default function HeroSection() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-bounce">
-        <div className="w-px h-10 bg-gradient-to-b from-white/25 to-transparent" />
-        <span className="text-white/20 text-[10px] tracking-[0.25em]">SCROLL</span>
+        <div className="w-px h-10 bg-gradient-to-b from-white/20 to-transparent" />
+        <span className="text-white/25 text-[10px] tracking-[0.28em] font-medium">SCROLL</span>
       </div>
 
       {/* Independent Hardware-Accelerated CSS Keyframes */}
@@ -196,18 +223,18 @@ export default function HeroSection() {
       `}</style>
 
       {/* Premium Aurora Mesh - GPU Optimized Architecture */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40 z-0" style={{ transform: "translateZ(0)" }}>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.38] z-[2]" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
         <div
-          className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#1b253b] blur-[80px]"
-          style={{ animation: "drift1 20s infinite linear", willChange: "transform" }}
+          className="absolute top-[5%] left-[-15%] w-[720px] h-[720px] rounded-full bg-[rgba(120,45,140,0.35)] blur-[80px]"
+          style={{ animation: "drift1 25s infinite linear", willChange: "transform" }}
         />
         <div
-          className="absolute bottom-[-10%] left-[5%] w-[600px] h-[600px] rounded-full bg-[#3c2a38] blur-[80px]"
-          style={{ animation: "drift2 25s infinite linear", willChange: "transform" }}
+          className="absolute bottom-[-5%] right-[-10%] w-[780px] h-[780px] rounded-full bg-[rgba(45,75,120,0.32)] blur-[80px]"
+          style={{ animation: "drift2 30s infinite linear", willChange: "transform" }}
         />
         <div
-          className="absolute top-[40%] left-[30%] w-[500px] h-[500px] rounded-full bg-[#142621] blur-[80px]"
-          style={{ animation: "drift3 30s infinite linear", willChange: "transform" }}
+          className="absolute top-[35%] left-[25%] w-[480px] h-[480px] rounded-full bg-[rgba(90,40,95,0.2)] blur-[70px]"
+          style={{ animation: "drift3 35s infinite linear", willChange: "transform" }}
         />
       </div>
     </section>

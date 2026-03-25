@@ -35,11 +35,11 @@ export default function LoadingScreen({ onComplete, onReveal }: { onComplete: ()
       setTimeout(() => onComplete(), 6200), // Safely unmount after animation completes
     ];
     return () => timers.forEach(clearTimeout);
-  }, [onComplete]);
+  }, [onComplete, onReveal]);
 
   return (
     <div
-      className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#050505]"
+      className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#0a0a0a]"
       style={{
         cursor: "none",
         transform: phase >= 6 ? "translateY(-100%)" : "translateY(0)",

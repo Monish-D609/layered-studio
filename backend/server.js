@@ -38,7 +38,7 @@ app.post("/send-email", async (req, res) => {
     if (!fullName || !email || !phone || !budget) {
         return res
             .status(400)
-            .json({ success: false, error: "Missing required fields." });
+            .json({ success: false, error: "Missing required fields (fullName, email, phone, and budget are required)." });
     }
 
     const mailOptions = {

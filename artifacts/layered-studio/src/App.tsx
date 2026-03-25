@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
@@ -10,38 +11,15 @@ import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import ScrollRevealSection from "@/components/ScrollRevealSection";
+import Lenis from "@studio-freight/lenis";
 
-/** Wrapper that staggers each child section's entrance after loading */
-function StaggeredSection({
-  show,
-  delay,
-  direction = "up",
-  children,
-}: {
-  show: boolean;
-  delay: number;
-  direction?: "up" | "down";
-  children: React.ReactNode;
-}) {
-  const yOffset = direction === "up" ? 40 : -40;
-
-  return (
-    <div
-      style={{
-        opacity: show ? 1 : 0,
-        transform: show ? "none" : `translateY(${yOffset}px)`,
-        transition: "opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)",
-        transitionDelay: show ? `${delay}ms` : "0ms",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
 function App() {
   const [loadingScreenMounted, setLoadingScreenMounted] = useState(true);
   const [contentReady, setContentReady] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const handleLoadingComplete = useCallback(() => {
     setLoadingScreenMounted(false);
@@ -49,6 +27,31 @@ function App() {
 
   const handleReveal = useCallback(() => {
     setContentReady(true);
+  }, []);
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
   }, []);
 
   // Reveal on scroll for inner elements that manually trigger .reveal class
@@ -81,37 +84,78 @@ function App() {
           onReveal={handleReveal} 
         />
       )}
-      <div className="min-h-screen bg-[#080808]">
-        <StaggeredSection show={contentReady} delay={0} direction="down">
+      <motion.div
+        className="min-h-screen bg-transparent overflow-x-hidden"
+        initial={false}
+        animate={
+          contentReady
+            ? { opacity: 1, y: 0, scale: 1 }
+            : reduceMotion
+              ? { opacity: 0, y: 0, scale: 1 }
+              : { opacity: 0, y: 20, scale: 0.988 }
+        }
+        transition={
+          reduceMotion ? { duration: 0 } : { duration: 1.05, ease: easeOut }
+        }
+      >
+        <motion.div
+          initial={false}
+          animate={
+            contentReady
+              ? { opacity: 1, y: 0 }
+              : reduceMotion
+                ? { opacity: 0, y: 0 }
+                : { opacity: 0, y: -18 }
+          }
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { duration: 0.78, delay: 0.12, ease: easeOut }
+          }
+        >
           <Navbar />
-        </StaggeredSection>
+        </motion.div>
         <main>
-          <StaggeredSection show={contentReady} delay={100}>
+          <motion.div
+            initial={false}
+            animate={
+              contentReady
+                ? { opacity: 1, y: 0 }
+                : reduceMotion
+                  ? { opacity: 0, y: 0 }
+                  : { opacity: 0, y: 40 }
+            }
+            transition={
+              reduceMotion
+                ? { duration: 0 }
+                : { duration: 0.92, delay: 0.22, ease: easeOut }
+            }
+          >
             <HeroSection />
-          </StaggeredSection>
-          <StaggeredSection show={contentReady} delay={200}>
+          </motion.div>
+          <ScrollRevealSection enabled={contentReady}>
             <CapabilitiesSection />
-          </StaggeredSection>
-          <StaggeredSection show={contentReady} delay={300}>
+          </ScrollRevealSection>
+          <ScrollRevealSection enabled={contentReady}>
             <ProcessSection />
-          </StaggeredSection>
-          <StaggeredSection show={contentReady} delay={400}>
+          </ScrollRevealSection>
+          <ScrollRevealSection enabled={contentReady}>
             <WorkSection />
-          </StaggeredSection>
-          <StaggeredSection show={contentReady} delay={500}>
+          </ScrollRevealSection>
+          <ScrollRevealSection enabled={contentReady}>
             <PricingSection />
-          </StaggeredSection>
-          <StaggeredSection show={contentReady} delay={600}>
+          </ScrollRevealSection>
+          <ScrollRevealSection enabled={contentReady}>
             <TestimonialsSection />
-          </StaggeredSection>
-          <StaggeredSection show={contentReady} delay={700}>
+          </ScrollRevealSection>
+          <ScrollRevealSection enabled={contentReady}>
             <ContactSection />
-          </StaggeredSection>
+          </ScrollRevealSection>
         </main>
-        <StaggeredSection show={contentReady} delay={800}>
+        <ScrollRevealSection enabled={contentReady}>
           <Footer />
-        </StaggeredSection>
-      </div>
+        </ScrollRevealSection>
+      </motion.div>
     </>
   );
 }

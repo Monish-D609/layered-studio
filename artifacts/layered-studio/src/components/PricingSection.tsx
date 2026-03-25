@@ -104,8 +104,8 @@ export default function PricingSection() {
               key={plan.name}
               className={`relative flex flex-col w-full md:w-[340px] rounded-2xl border transition-all duration-300
                 ${plan.popular
-                  ? "bg-[#111] border-white/20 md:-mt-6 md:mb-0 shadow-[0_0_60px_rgba(255,255,255,0.04)] z-10"
-                  : "bg-[#0d0d0d] border-white/08"
+                  ? "bg-[#0f0f0f] border-white/18 md:-mt-6 md:mb-0 shadow-[0_0_60px_rgba(255,255,255,0.04)] z-10"
+                  : "bg-[#0c0c0c] border-white/[0.08]"
                 }`}
               style={{
                 borderColor: plan.popular ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.07)",
@@ -114,7 +114,7 @@ export default function PricingSection() {
               {/* Most popular badge */}
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <div className="bg-[#111] border border-white/20 rounded-full px-5 py-1.5 text-white text-xs font-bold tracking-widest whitespace-nowrap">
+                  <div className="bg-[#0f0f0f] border border-white/18 rounded-full px-5 py-1.5 text-white text-xs font-bold tracking-widest whitespace-nowrap">
                     MOST POPULAR
                   </div>
                 </div>
@@ -189,8 +189,8 @@ export default function PricingSection() {
                   onClick={scrollToContact}
                   className={`mt-8 w-full py-3.5 rounded-xl text-sm font-bold tracking-widest transition-all duration-200 hover:scale-[1.02]
                     ${plan.popular
-                      ? "bg-white text-black hover:bg-white/90"
-                      : "bg-transparent border border-white/15 text-white hover:border-white/35 hover:bg-white/4"
+                      ? "bg-[#d1d1d1] text-[#0a0a0a] hover:brightness-105"
+                      : "bg-transparent border border-white/18 text-white hover:border-white/35 hover:bg-white/[0.04]"
                     }`}
                 >
                   {plan.cta}

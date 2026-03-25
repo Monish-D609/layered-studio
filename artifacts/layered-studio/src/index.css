@@ -28,19 +28,20 @@
 }
 
 :root {
-  --background: 0 0% 3%;
-  --foreground: 0 0% 96%;
-  --card: 0 0% 6%;
+  /* Dark SaaS / agency: deep charcoal + silver typography */
+  --background: 0 0% 4%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 7%;
   --card-foreground: 0 0% 96%;
-  --border: 0 0% 14%;
-  --input: 0 0% 14%;
-  --ring: 0 0% 96%;
-  --primary: 0 0% 96%;
-  --primary-foreground: 0 0% 5%;
-  --secondary: 0 0% 10%;
+  --border: 0 0% 16%;
+  --input: 0 0% 16%;
+  --ring: 0 0% 90%;
+  --primary: 0 0% 82%;
+  --primary-foreground: 0 0% 6%;
+  --secondary: 0 0% 12%;
   --secondary-foreground: 0 0% 96%;
-  --muted: 0 0% 10%;
-  --muted-foreground: 0 0% 55%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 53%;
   --accent: 0 0% 14%;
   --accent-foreground: 0 0% 96%;
   --destructive: 0 84% 60%;
@@ -48,6 +49,9 @@
   --app-font-sans: 'Inter', sans-serif;
   --app-font-display: 'Space Grotesk', sans-serif;
   --radius: 0.75rem;
+  --theme-bg: #0a0a0a;
+  --theme-body: #888888;
+  --theme-cta: #d1d1d1;
 }
 
 @layer base {
@@ -57,8 +61,8 @@
   }
   
   ::selection {
-    background-color: #10b981; /* Premium Emerald Green */
-    color: #ffffff;
+    background-color: rgba(209, 209, 209, 0.35);
+    color: #0a0a0a;
   }
 
   html {
@@ -66,15 +70,41 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    background-color: #080808;
+    @apply text-foreground font-sans antialiased;
+    background-color: var(--theme-bg);
+    background-image:
+      radial-gradient(ellipse 90% 70% at 0% 45%, rgba(88, 28, 135, 0.22), transparent 52%),
+      radial-gradient(ellipse 85% 65% at 100% 55%, rgba(37, 65, 110, 0.22), transparent 50%),
+      radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255, 255, 255, 0.04), transparent 45%);
+    background-attachment: fixed;
     cursor: none;
     overflow-x: hidden;
+  }
+
+  /* Lenis essential styles */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
   h1, h2, h3 {
     font-family: var(--app-font-display);
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -118,9 +148,9 @@
 /* Grid background */
 .grid-bg {
   background-image: 
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
 /* Premium Scanner Line */
@@ -154,22 +184,23 @@
 
 /* Glow effect */
 .hero-glow {
-  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,255,255,0.06), transparent);
+  background: radial-gradient(ellipse 90% 55% at 50% -15%, rgba(255,255,255,0.07), transparent 60%);
 }
 
 /* Glassmorphism card */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
   transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
 }
 
 /* Navbar blur */
@@ -210,35 +241,37 @@
 
 /* Button animations */
 .btn-primary {
-  background: white;
-  color: black;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--theme-cta);
+  color: var(--theme-bg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 .btn-primary:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 30px rgba(255,255,255,0.15);
+  box-shadow: 0 0 40px rgba(209, 209, 209, 0.12);
+  filter: brightness(1.05);
 }
 
 .btn-outline {
-  border: 1px solid rgba(255,255,255,0.3);
-  color: white;
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.92);
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 .btn-outline:hover {
-  border-color: rgba(255,255,255,0.7);
-  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.06);
   transform: scale(1.03);
 }
 
 /* Section reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translate3d(0, 1.75rem, 0);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* Testimonials */
@@ -277,9 +310,49 @@
 .section-label {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
+  color: #888888;
+}
+
+/* Body / muted copy */
+.text-theme-muted {
+  color: var(--theme-body);
+}
+
+/* Scroll-driven section entrance */
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 2.25rem, 0);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0ms;
+  will-change: opacity, transform;
+}
+
+.scroll-reveal--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: var(--scroll-reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal--visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    transition-delay: 0ms !important;
+    will-change: auto;
+  }
+
+  .reveal,
+  .reveal.visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* Process step */
@@ -345,7 +418,18 @@
   color: white;
 }
 .time-slot.selected {
-  background: white;
-  color: black;
-  border-color: white;
+  background: var(--theme-cta);
+  color: var(--theme-bg);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Performance boosts */
+section {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.hero-glow, .glass-card, .scroll-reveal {
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }

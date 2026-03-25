@@ -24,10 +24,10 @@ export default defineConfig({
     port: 5173,
     host: "0.0.0.0",
     allowedHosts: true,
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
+      fs: {
+        strict: true,
+        deny: ["**/.*"],
+      },
   },
   preview: {
     port: 5173,

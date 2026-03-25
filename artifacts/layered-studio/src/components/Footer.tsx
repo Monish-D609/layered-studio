@@ -47,7 +47,7 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <a 
               href="mailto:layeredstudio.in@gmail.com" 
-              className="text-white/30 hover:text-[#10b981] transition-colors" 
+              className="text-white/30 hover:text-white/90 transition-colors" 
               aria-label="Email"
             >
               <Mail className="w-4 h-4 md:w-5 md:h-5" />
@@ -56,7 +56,7 @@ export default function Footer() {
               href="https://x.com/Not_human_609" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-white/30 hover:text-[#10b981] transition-colors" 
+              className="text-white/30 hover:text-white/90 transition-colors" 
               aria-label="X (Twitter)"
             >
               <Twitter className="w-4 h-4 md:w-5 md:h-5" />
@@ -65,7 +65,7 @@ export default function Footer() {
               href="https://www.linkedin.com/in/monish-d07" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-white/30 hover:text-[#10b981] transition-colors" 
+              className="text-white/30 hover:text-white/90 transition-colors" 
               aria-label="LinkedIn"
             >
               <Linkedin className="w-4 h-4 md:w-5 md:h-5" />
@@ -74,14 +74,14 @@ export default function Footer() {
               href="https://www.instagram.com/monish_8107" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-white/30 hover:text-[#10b981] transition-colors" 
+              className="text-white/30 hover:text-white/90 transition-colors" 
               aria-label="Instagram"
             >
               <Instagram className="w-4 h-4 md:w-5 md:h-5" />
             </a>
             <a 
               href="tel:+917676607637" 
-              className="text-white/30 hover:text-[#10b981] transition-colors" 
+              className="text-white/30 hover:text-white/90 transition-colors" 
               aria-label="Phone"
             >
               <Phone className="w-4 h-4 md:w-5 md:h-5" />
