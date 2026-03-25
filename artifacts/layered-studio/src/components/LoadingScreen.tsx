@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useDeviceCapabilities from "@/hooks/use-device-capabilities";
 
 /**
  * The Layered Studio logo is 4 stacked rounded rectangles,
@@ -15,6 +16,8 @@ const layers = [
 
 export default function LoadingScreen({ onComplete, onReveal }: { onComplete: () => void, onReveal?: () => void }) {
   const [phase, setPhase] = useState(0);
+  const { prefersReducedMotion, lowPower } = useDeviceCapabilities();
+  const lightweight = prefersReducedMotion || lowPower;
   // 0 = black screen
   // 1 = grid appears + layers start stacking
   // 2 = layers fully stacked, glow pulse
@@ -24,6 +27,17 @@ export default function LoadingScreen({ onComplete, onReveal }: { onComplete: ()
   // 6 = fade out
 
   useEffect(() => {
+    if (lightweight) {
+      const timers = [
+        setTimeout(() => setPhase(1), 80),
+        setTimeout(() => onReveal?.(), 150),
+        setTimeout(() => setPhase(6), 260),
+        setTimeout(() => onComplete(), 360),
+      ];
+
+      return () => timers.forEach(clearTimeout);
+    }
+
     const timers = [
       setTimeout(() => setPhase(1), 300),
       setTimeout(() => setPhase(2), 1500),
@@ -35,7 +49,7 @@ export default function LoadingScreen({ onComplete, onReveal }: { onComplete: ()
       setTimeout(() => onComplete(), 6200), // Safely unmount after animation completes
     ];
     return () => timers.forEach(clearTimeout);
-  }, [onComplete, onReveal]);
+  }, [lightweight, onComplete, onReveal]);
 
   return (
     <div

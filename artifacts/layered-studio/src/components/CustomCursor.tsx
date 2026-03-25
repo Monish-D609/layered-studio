@@ -1,55 +1,125 @@
 import { useEffect, useRef } from "react";
+import useDeviceCapabilities from "@/hooks/use-device-capabilities";
 
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const { finePointer, prefersReducedMotion, lowPower } = useDeviceCapabilities();
 
   useEffect(() => {
+    if (!finePointer || prefersReducedMotion || lowPower) {
+      return;
+    }
+
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
-    let mouseX = 0, mouseY = 0;
-    let ringX = 0, ringY = 0;
-    let raf: number;
+    const interactiveSelector = "a, button, [data-cursor-hover]";
 
-    const onMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      dot.style.left = `${mouseX}px`;
-      dot.style.top = `${mouseY}px`;
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    let raf = 0;
+    let active = false;
+
+    dot.style.opacity = "0";
+    ring.style.opacity = "0";
+
+    const applyHoverState = (hovered: boolean) => {
+      ring.classList.toggle("hovered", hovered);
     };
 
     const animate = () => {
-      ringX += (mouseX - ringX) * 0.12;
-      ringY += (mouseY - ringY) * 0.12;
-      ring.style.left = `${ringX}px`;
-      ring.style.top = `${ringY}px`;
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+
+      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+
+      if (Math.abs(mouseX - ringX) > 0.1 || Math.abs(mouseY - ringY) > 0.1) {
+        raf = requestAnimationFrame(animate);
+        return;
+      }
+
+      active = false;
+    };
+
+    const startAnimation = () => {
+      if (active) return;
+      active = true;
       raf = requestAnimationFrame(animate);
     };
 
-    const onEnter = () => ring.classList.add("hovered");
-    const onLeave = () => ring.classList.remove("hovered");
+    const onPointerMove = (event: PointerEvent) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
 
-    window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(animate);
+      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+      dot.style.opacity = "1";
+      ring.style.opacity = "1";
 
-    const interactables = document.querySelectorAll("a, button, [data-cursor-hover]");
-    interactables.forEach(el => {
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-    });
+      startAnimation();
+    };
+
+    const onPointerOver = (event: PointerEvent) => {
+      const target = event.target as Element | null;
+      if (target?.closest(interactiveSelector)) {
+        applyHoverState(true);
+      }
+    };
+
+    const onPointerOut = (event: PointerEvent) => {
+      const target = event.target as Element | null;
+      const relatedTarget = event.relatedTarget as Element | null;
+
+      if (!target?.closest(interactiveSelector)) {
+        return;
+      }
+
+      if (relatedTarget?.closest(interactiveSelector)) {
+        return;
+      }
+
+      applyHoverState(false);
+    };
+
+    const onWindowBlur = () => {
+      dot.style.opacity = "0";
+      ring.style.opacity = "0";
+      applyHoverState(false);
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.addEventListener("pointerover", onPointerOver, true);
+    document.addEventListener("pointerout", onPointerOut, true);
+    window.addEventListener("blur", onWindowBlur);
 
     return () => {
-      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerover", onPointerOver, true);
+      document.removeEventListener("pointerout", onPointerOut, true);
+      window.removeEventListener("blur", onWindowBlur);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [finePointer, prefersReducedMotion, lowPower]);
+
+  if (!finePointer || prefersReducedMotion || lowPower) {
+    return null;
+  }
 
   return (
     <>
-      <div ref={dotRef} className="cursor-dot" />
-      <div ref={ringRef} className="cursor-ring" />
+      <div
+        ref={dotRef}
+        className="cursor-dot"
+        style={{ transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)" }}
+      />
+      <div
+        ref={ringRef}
+        className="cursor-ring"
+        style={{ transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)" }}
+      />
     </>
   );
 }

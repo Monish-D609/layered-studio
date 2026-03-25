@@ -13,6 +13,7 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ScrollRevealSection from "@/components/ScrollRevealSection";
 import Lenis from "@studio-freight/lenis";
+import useDeviceCapabilities from "@/hooks/use-device-capabilities";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -20,6 +21,7 @@ function App() {
   const [loadingScreenMounted, setLoadingScreenMounted] = useState(true);
   const [contentReady, setContentReady] = useState(false);
   const reduceMotion = useReducedMotion();
+  const { finePointer, lowPower } = useDeviceCapabilities();
 
   const handleLoadingComplete = useCallback(() => {
     setLoadingScreenMounted(false);
@@ -31,6 +33,10 @@ function App() {
 
   // Initialize Lenis smooth scroll
   useEffect(() => {
+    if (reduceMotion || !finePointer || lowPower) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -42,17 +48,20 @@ function App() {
       infinite: false,
     });
 
+    let rafId = 0;
+
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, []);
+  }, [finePointer, lowPower, reduceMotion]);
 
   // Reveal on scroll for inner elements that manually trigger .reveal class
   useEffect(() => {
@@ -77,7 +86,7 @@ function App() {
 
   return (
     <>
-      <CustomCursor />
+      {finePointer && !reduceMotion && !lowPower && <CustomCursor />}
       {loadingScreenMounted && (
         <LoadingScreen 
           onComplete={handleLoadingComplete} 
@@ -161,4 +170,3 @@ function App() {
 }
 
 export default App;
-
